@@ -4,14 +4,15 @@
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
-export default {
-  apiKey: "AIzaSyDpFvb1qf8u6QXuO6zzX4imEF2kroMygNA",
-  authDomain: "upb-go.firebaseapp.com",
-  projectId: "upb-go",
-  storageBucket: "upb-go.appspot.com",
-  messagingSenderId: "831734918879",
-  appId: "1:831734918879:web:4d841178ab91fa77fe436a"
+const FirebaseCredentials = {
+  apiKey: process.env.NEXT_PUBLIC_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_APP_ID
 };
 
 // Initialize Firebase
 //const app = initializeApp(firebaseConfig);
+export default FirebaseCredentials;

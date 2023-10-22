@@ -1,21 +1,10 @@
 "use client"
 import React from 'react';
-import { useForm } from "react-hook-form";
-//firebase
-import { FirebaseAppProvider, AuthProvider, useFirebaseApp} from 'reactfire';
-import config from '@/firebase/config';
-
-import Auxlogin from './components/auxlogin';
-
+import FireLogin from './components/fireLogin';
 
 const LoginPage = () =>{
     return(
-        <>
-        <FirebaseAppProvider firebaseConfig={config}>
-        
-        <Auxlogin/>
-        </FirebaseAppProvider>
-        </>
+            <FireLogin></FireLogin>
     )
 }
 

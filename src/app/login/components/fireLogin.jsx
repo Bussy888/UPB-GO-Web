@@ -1,21 +1,23 @@
 "use client"
 import React from 'react';
 import { useForm } from "react-hook-form";
-import { useAuth } from 'reactfire';
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { useAuth } from '@/firebase/authContext';
+import { useRouter } from 'next/router';
 const FireLogin = () =>{
     const { register, formState: { errors }, handleSubmit} = useForm();
-    const auth = useAuth();
-    const createUser = async (email, password) =>{
-        const reponse = await createUserWithEmailAndPassword(auth,"admin1@upb.com", "esteEselPassword");
-        debugger;
-    }
+    const {signInWithEmailAndPassword} = useAuth();
+    const router = useRouter();
     const onSubmit = (data) =>{
         const user ={
             user:data.email,
             password:data.password
         }
-        createUser(data.email, data.password);
+        signInWithEmailAndPassword(user.user, user.password).then(authUser => {
+            console.log("logged in :)")
+        })
+        .catch(error => {
+            console.log("not logged in :(")
+        });
     }
     
     return (
