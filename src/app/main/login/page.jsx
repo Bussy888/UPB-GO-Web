@@ -2,7 +2,7 @@
 import React from 'react';
 import { useForm } from "react-hook-form";
 import { useAuth} from 'reactfire';
-import {getAuth, signInWithEmailAndPassword} from "firebase/auth";
+import {signInWithEmailAndPassword} from "firebase/auth";
 const LoginPage = () =>{
     const { register, formState: { errors }, handleSubmit} = useForm();
     const auth = useAuth();
@@ -40,7 +40,7 @@ const LoginPage = () =>{
                     <div className='flex flex-col'>
                         <label className=" text-xl text-black mb-5 font-medium">Password</label>
                         <input
-                            type="text"
+                            type="password"
                             className=" text-base border-2 border-black w-72 h-9 invalid:border-red-800 px-4 py-3 text-black"
                             placeholder="*******"
                             {...register('password', {
