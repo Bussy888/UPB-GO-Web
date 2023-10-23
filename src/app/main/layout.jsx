@@ -1,18 +1,18 @@
 "use client"
 import React from 'react';
 import { Inter } from 'next/font/google'
-import { FirebaseAppProvider} from 'reactfire';
-import './globals.css'
-import config from '@/firebase/config';
+import {AuthProvider, useFirebaseApp } from 'reactfire';
+import { getAuth } from 'firebase/auth';
+import '../globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default function RootLayout({ children }) {
+  const app = useFirebaseApp();
+    const auth = getAuth(app);
   return (
-    <html lang="en">
-      <FirebaseAppProvider firebaseConfig={config}>
+      <AuthProvider sdk={auth}>
       <body className={inter.className}>{children}</body>
-      </FirebaseAppProvider>
-    </html>
+      </AuthProvider>
   )
 }
