@@ -3,7 +3,7 @@ import React from 'react';
 import { useEffect} from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth, useUser} from 'reactfire';
-const MainPage = () => {
+const EventosPage = () => {
     const auth = useAuth();
     const router = useRouter();
     const user = useUser();
@@ -24,4 +24,4 @@ const MainPage = () => {
   )
 }
 
-export default MainPage;
+export default EventosPage;

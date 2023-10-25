@@ -8,6 +8,7 @@ import '../globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export default function RootLayout({ children }) {
+  //TODO: CREAR CONTEXT PARA GUARDAR USUARIO LOGEADO
   const app = useFirebaseApp();
     const auth = getAuth(app);
   return (

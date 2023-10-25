@@ -3,9 +3,11 @@ import React from 'react';
 import { useForm } from "react-hook-form";
 import { useAuth} from 'reactfire';
 import {signInWithEmailAndPassword} from "firebase/auth";
+import { useRouter } from 'next/navigation';
 const LoginPage = () =>{
     const { register, formState: { errors }, handleSubmit} = useForm();
     const auth = useAuth();
+    const router = useRouter();
     const signIn = async (email, password) =>{
         //"esteEselPassword"
         const response = await signInWithEmailAndPassword(auth,email,password);
@@ -19,6 +21,7 @@ const LoginPage = () =>{
             password:data.password
         }
         signIn(user.user, user.password);
+        router.push('/main/start');
     }
     
     return (
@@ -49,7 +52,7 @@ const LoginPage = () =>{
                         />
                         {errors.password?.type === 'required' && <h1 className=" text-base text-red-700">*Debe llenar este campo</h1>}
                     </div>
-                    <button className=' flex text-xl font-medium w-76 h-9 bg-[#929292] px-5 py-6 text-black justify-center items-center align-middle' type="submit">Continuar</button>
+                    <button className=' flex text-xl font-medium w-76 h-9 bg-[#929292] px-5 py-6 text-white justify-center items-center align-middle' type="submit">Continuar</button>
 
                 </form>
                 
