@@ -4,7 +4,17 @@ import { useForm } from "react-hook-form";
 import { useAuth} from 'reactfire';
 import {signInWithEmailAndPassword} from "firebase/auth";
 import { useRouter } from 'next/navigation';
+import { useUserContext } from '../../layout';
+import { useEffect} from 'react';
 const LoginPage = () =>{
+
+    const {user, setUser} = useUserContext();
+    useEffect(() => {
+      if(user!=null){
+          router.push('/main/start');
+      }
+    }, [])
+
     const { register, formState: { errors }, handleSubmit} = useForm();
     const auth = useAuth();
     const router = useRouter();
@@ -12,8 +22,10 @@ const LoginPage = () =>{
         //"esteEselPassword"
         const response = await signInWithEmailAndPassword(auth,email,password);
         console.log(response)
-        const user = auth.currentUser;
-        console.log(user);
+        const userFirebase = auth.currentUser;
+        console.log(userFirebase);
+        setUser(userFirebase);
+        router.push('/main/start');
     }
     const onSubmit = (data) =>{
         const user ={
@@ -21,7 +33,6 @@ const LoginPage = () =>{
             password:data.password
         }
         signIn(user.user, user.password);
-        router.push('/main/start');
     }
     
     return (

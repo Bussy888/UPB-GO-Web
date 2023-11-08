@@ -3,13 +3,13 @@ import React from 'react';
 import { useEffect} from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth, useUser} from 'reactfire';
+import { useUserContext } from '../layout';
 const MainPage = () => {
-    const auth = useAuth();
     const router = useRouter();
-    const user = useUser();
+    const {user} = useUserContext();
   useEffect(() => {
-    //TODO: add context to save user there
-    if(!auth.currentUser){
+    console.log(user)
+    if(user===null){
         router.push('/main/login');
     }else{
         console.log("hola");
