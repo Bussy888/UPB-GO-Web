@@ -8,12 +8,7 @@ const MainPage = () => {
     const router = useRouter();
     const {user} = useUserContext();
   useEffect(() => {
-    console.log(user)
-    if(user===null){
         router.push('/main/login');
-    }else{
-        console.log("hola");
-    }
   }, [])
 
   return (

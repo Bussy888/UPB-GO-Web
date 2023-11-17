@@ -20,7 +20,9 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <UserContext.Provider value={{user, setUser}}>
       <FirebaseAppProvider firebaseConfig={config}>
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        {children}
+        </body>
       </FirebaseAppProvider>
       </UserContext.Provider>
     </html>

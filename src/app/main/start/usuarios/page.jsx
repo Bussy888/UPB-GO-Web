@@ -5,9 +5,13 @@ import { useRouter } from 'next/navigation';
 import {createUserWithEmailAndPassword} from "firebase/auth";
 import { useAuth, useUser} from 'reactfire';
 import { useForm } from "react-hook-form";
+import {useFirestore, useFirestoreCollectionData} from "reactfire";
+import {collection, addDoc, setDoc, doc} from "firebase/firestore";
 const UsuariosPage = () => {
     const auth = useAuth();
     const router = useRouter();
+    const firestore = useFirestore();
+    const usersCollection = collection(firestore, 'users');
 
   useEffect(() => {
     //TODO: add context to save user there
@@ -18,19 +22,25 @@ const UsuariosPage = () => {
     }
   }, [])
 
-  const { register, watch, formState: { errors }, handleSubmit} = useForm();
+  const { register, watch, formState: { errors }, handleSubmit} = useForm({defaultValues: {admin: false}});
 
-  const signUp = async (email, password) =>{
-    const response = await createUserWithEmailAndPassword(auth,email,password);
+  const signUp = async (user) =>{
+    const response = await createUserWithEmailAndPassword(auth,user.email,user.password);
     console.log(response)
+    const userDoc = await setDoc(doc(firestore, "users", response.user.uid), {
+      admin: user.admin,
+      eventos: 0,
+    });
+    console.log(userDoc)
     router.push('/main/start');
 }
 const onSubmit = (data) =>{
     const user ={
-        user:data.email,
-        password:data.password
+        email:data.email,
+        password:data.password,
+        admin: (data.admin=="true" ? true : false)
     }
-    signUp(user.user, user.password);
+    signUp(user);
 }
 
 const back = () =>{
@@ -65,6 +75,13 @@ const back = () =>{
                             })}
                         />
                         {errors.password?.type === 'required' && <h1 className=" text-base text-red-700">*Debe llenar este campo</h1>}
+                    </div>
+                    <div className = 'flex flex-row w-full items-center justify-center align-middle gap-3'>
+                          <input 
+                                type='checkbox'
+                                value={true}
+                                {...register("admin")}/>
+                          <label className=" text-left font-medium text-black">Administrador</label>
                     </div>
         </div>
         <div className='flex w-full justify-center items-center align-middle flex-row gap-2'>
