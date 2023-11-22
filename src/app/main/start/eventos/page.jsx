@@ -14,6 +14,7 @@ const EventosPage = () => {
     const firestore = useFirestore();
     const eventosCollection = collection(firestore, "eventos");
     const [eventos, setEventos] = useState([]);
+    const [changed, setChanged] = useState(true)
 
     const loadEventos = async () =>{
       const queryEventos = query(eventosCollection, where("user_id", "==", user?.uid));
@@ -39,7 +40,7 @@ const EventosPage = () => {
     }else{
         loadEventos();
     }
-  }, [])
+  }, [changed])
 
   const back = () =>{
     router.push('/main/start');
@@ -50,13 +51,13 @@ const EventosPage = () => {
       <div className='flex flex-col bg-[#EAEAEA] border-2 border-black p-6 gap-10 w-5/12'>
         <div className='flex w-full text-2xl text-start text-black'>Eventos</div>
         
-          <div className='flex flex-col h-1/3'>
+          <div className='flex flex-col h-1/3 gap-5'>
             {eventos.length === 0 ?
             <div className='flex flex-col gap-10 border-2 border-black bg-[#f6f6f6] p-5 w-full' >
             <div className=" text-xl text-black font-medium text-center">Puedes crear tu primer evento haciendo click en 'Añadir'</div>
             </div>:
             
-            eventos.map((eventoLista, index) => <EventBox evento={eventoLista}></EventBox>)
+            eventos.map((eventoLista, index) => <EventBox evento={eventoLista} index={index} changed={changed} setChanged={setChanged}></EventBox>)
             
             }
           

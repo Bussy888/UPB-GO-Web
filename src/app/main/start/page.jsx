@@ -52,6 +52,7 @@ const StartPage = () =>{
                 <button className=' flex text-xl font-medium w-76 h-9 bg-[#929292] px-5 py-6 text-white justify-center items-center align-middle' type="submit" onClick={() => redirigir('eventos')}>Eventos</button>
                 {userDoc?.admin ? <button className=' flex text-xl font-medium w-76 h-9 bg-[#929292] px-5 py-6 text-white justify-center items-center align-middle' type="submit" onClick={() => redirigir('usuarios')}>Crear Usuario</button>: <></>}
                 <button className=' flex text-xl font-medium w-76 h-9 bg-[#929292] px-5 py-6 text-white justify-center items-center align-middle' type="submit" onClick={()=>redirigir('cambiarPassword')}>Cambiar Contraseña</button>
+                {userDoc?.admin ? <button className=' flex text-xl font-medium w-76 h-9 bg-[#929292] px-5 py-6 text-white justify-center items-center align-middle' type="submit" onClick={() => redirigir('usuarios')}>Cambiar Contraseña de Usuario</button>: <></>}
                 <button className=' flex text-xl font-medium w-76 h-9 bg-[#CB2F2F] px-5 py-6 text-white justify-center items-center align-middle' type="submit" onClick={() =>salir()}>Salir</button>
             </div>
         </div>
