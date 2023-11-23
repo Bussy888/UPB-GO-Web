@@ -5,16 +5,50 @@ import { useRouter } from 'next/navigation';
 import { useAuth, useUser} from 'reactfire';
 import { useUserContext } from '../../../../layout';
 import {useFirestore, useFirestoreCollectionData} from "reactfire";
-import {collection, addDoc, setDoc, doc, getDoc, getDocs, where, deleteDoc} from "firebase/firestore";
+import {collection, addDoc, setDoc, doc, getDoc, getDocs, where, deleteDo, getDocFromServer, updateDoc, increment} from "firebase/firestore";
 const EventBox = (evento) => {
   const auth = useAuth();
   const router = useRouter();
   const {user, setUser} = useUserContext();
   const firestore = useFirestore();
+  const eventosCollection = collection(firestore, "eventos");
   const actividadesCollection = collection(firestore, "eventos/"+evento.evento.id+"/actividades");
   const [actividades, setActividades] = useState([]);
   const compararPosicion = (a,b) =>{
     return a.posicion - b.posicion
+  }
+
+  const postData = async() =>{
+    const userRef = doc(firestore, "users", user?.uid)
+    const updateResponse = await updateDoc(userRef, {
+      eventos: increment(1)
+    })
+    console.log(updateResponse);
+    const userDoc = await getDoc(userRef);
+    const userData = userDoc.data()
+    const idEventoCopia=user?.uid+"Evento"+userData.eventos;
+    const responseSet = await setDoc(doc(firestore, "eventos",idEventoCopia),{
+      fecha: evento.evento.fecha,
+      nombre: (evento.evento.nombre+" copia"),
+      user_id: user?.uid
+    });
+    console.log(responseSet)
+    actividades.map(
+      async (actividad) =>
+      {
+        const response = await setDoc(doc(firestore, "eventos/"+idEventoCopia+"/actividades", user?.uid+"actividad"+actividad.posicion),{
+          codigo: actividad.codigo,
+          descripcion: actividad.descripcion,
+          pista: actividad.pista,
+          posicion: actividad.posicion
+        });
+        console.log(response);
+      }
+    )
+  }
+
+  const copiarEvento = async()=>{
+    postData();
   }
 
   const deleteActividades = async() =>{
@@ -75,7 +109,7 @@ useEffect(() => {
                 <div className='flex text-xs text-start text-black mb-1'>({evento.evento.fecha})</div>
             </div>
             <div className='flex flex-row w-2/5 gap-2 items-end justify-end'>
-                <div className='flex text-base text-center text-black underline hover:text-gray-700'>Copiar</div>
+                <div className='flex text-base text-center text-black underline hover:text-gray-700' onClick={() => copiarEvento()}>Copiar</div>
                 <div className='flex text-base text-center text-black underline hover:text-gray-700'>Ver</div>
             </div>
         </div>
