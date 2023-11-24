@@ -47,7 +47,7 @@ const EventosPage = () => {
   }
 
   return (
-    <div className='flex w-full h-screen bg-[#F2F2F2] justify-center align-middle items-center'>
+    <div className='flex w-full min-h-screen bg-[#F2F2F2] justify-center align-middle items-center p-7'>
       <div className='flex flex-col bg-[#EAEAEA] border-2 border-black p-6 gap-10 w-5/12'>
         <div className='flex w-full text-2xl text-start text-black'>Eventos</div>
         

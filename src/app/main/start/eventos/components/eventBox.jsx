@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth, useUser} from 'reactfire';
 import { useUserContext } from '../../../../layout';
 import {useFirestore, useFirestoreCollectionData} from "reactfire";
-import {collection, addDoc, setDoc, doc, getDoc, getDocs, where, deleteDo, getDocFromServer, updateDoc, increment} from "firebase/firestore";
+import {collection, addDoc, setDoc, doc, getDoc, getDocs, where, deleteDoc, getDocFromServer, updateDoc, increment} from "firebase/firestore";
 const EventBox = (evento) => {
   const auth = useAuth();
   const router = useRouter();
@@ -14,6 +14,7 @@ const EventBox = (evento) => {
   const eventosCollection = collection(firestore, "eventos");
   const actividadesCollection = collection(firestore, "eventos/"+evento.evento.id+"/actividades");
   const [actividades, setActividades] = useState([]);
+
   const compararPosicion = (a,b) =>{
     return a.posicion - b.posicion
   }
@@ -40,9 +41,10 @@ const EventBox = (evento) => {
           codigo: actividad.codigo,
           descripcion: actividad.descripcion,
           pista: actividad.pista,
-          posicion: actividad.posicion
+          posicion: actividad.posicion,
+          nombreCarta: actividad.nombre_carta,
+          nombreModelo: actividad.nombre_modelo
         });
-        console.log(response);
       }
     )
   }
@@ -56,14 +58,12 @@ const EventBox = (evento) => {
       async (actividad) =>
       {
         const response = await deleteDoc(doc(firestore, "eventos/"+evento.evento.id+"/actividades", actividad.id));
-        console.log(response);
       }
     )
   }
 
   const deleteEvento = async () =>{
     const response = await deleteDoc(doc(firestore, "eventos", evento.evento.id));
-    console.log(response);
   }
 
   const startDeletion = () =>{
@@ -90,6 +90,14 @@ const EventBox = (evento) => {
     setActividades(sortedAux);
   }
 
+  const redirigir = (texto) =>{
+    if(user!=null){
+        router.push('/main/view/evento/'+texto);
+    } else{
+        router.push('/main/login');
+    }
+}
+
 useEffect(() => {
   //TODO: add context to save user there
   if(!auth.currentUser){
@@ -109,8 +117,8 @@ useEffect(() => {
                 <div className='flex text-xs text-start text-black mb-1'>({evento.evento.fecha})</div>
             </div>
             <div className='flex flex-row w-2/5 gap-2 items-end justify-end'>
-                <div className='flex text-base text-center text-black underline hover:text-gray-700' onClick={() => copiarEvento()}>Copiar</div>
-                <div className='flex text-base text-center text-black underline hover:text-gray-700'>Ver</div>
+                <div className='flex text-base text-center text-black underline hover:text-gray-600 cursor-pointer' onClick={() => copiarEvento()}>Copiar</div>
+                <div className='flex text-base text-center text-black underline hover:text-gray-600 cursor-pointer' onClick={() => redirigir(evento.evento.id)}>Ver</div>
             </div>
         </div>
         
@@ -120,7 +128,7 @@ useEffect(() => {
             :
             
             actividades.map((actividadLista, index) => 
-            <div className='flex w-full text-black' key={index}>
+            <div className='flex w-full text-black' index={index}>
               # {actividadLista.posicion} {actividadLista.descripcion}
             </div>)
             
