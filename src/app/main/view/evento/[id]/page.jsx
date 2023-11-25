@@ -78,6 +78,8 @@ useEffect(() => {
             </div>
 
             <div className='flex text-xl text-start text-black'>Progreso</div>
+
+            <div className='flex text-xl text-start text-black'>Actividades</div>
         
           <div className='flex flex-col h-1/3 gap-5'>
             {actividades.length === 0 ?

@@ -25,7 +25,8 @@ const EventosPage = () => {
           id: doc.id,
           nombre: data.nombre,
           fecha: data.fecha,
-          user_id: data.user_id
+          user_id: data.user_id,
+          codigo: eventoData.codigo
         }
         return newEvent;
       });
