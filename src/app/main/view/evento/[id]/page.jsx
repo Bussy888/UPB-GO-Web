@@ -34,7 +34,8 @@ const ViewEventoPage = ({params}) => {
               id: doc.id,
               secuencia: data.secuencia,
               nombre: data.nombre,
-              asignado: data.asignado
+              asignado: data.asignado,
+              eventoId: data.evento_id
             }
             return newEquipo;
           });

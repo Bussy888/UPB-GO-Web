@@ -40,6 +40,17 @@ const EventosPage = () => {
         evento_id: idEvento
       });
       console.log(actividadPrueba)
+
+      const primerEquipo = await addDoc(
+        collection(firestore, "eventos/"+idEvento+"/equipos"),
+        {
+          secuencia: "0",
+          nombre: "Rojo",
+          asignado: false,
+          evento_id: idEvento
+        }
+      )
+      console.log(primerEquipo);
     }
 
     const onSubmit = (data) =>{
