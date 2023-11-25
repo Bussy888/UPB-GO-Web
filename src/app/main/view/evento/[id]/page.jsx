@@ -8,6 +8,7 @@ import {useFirestore, useFirestoreCollectionData} from "reactfire";
 import {collection, addDoc, setDoc, doc, getDocs, getDoc, query, where} from "firebase/firestore";
 import ActivityBox from '../../components/activityBox';
 import EquipoBox from '../../components/equipoBox';
+import FilaProgresoBox from '../../components/filaProgresoBox';
 
 const ViewEventoPage = ({params}) => {
     const auth = useAuth();
@@ -133,11 +134,11 @@ const ViewEventoPage = ({params}) => {
     }, [changed])
 
     const redirigirCrear = (text) =>{
-      router.push('/main/view/create/'+text);
+      router.push('/main/view/create/'+text+'/'+params.id);
     }
 
-    const redirigirEditar = (text) =>{
-      router.push('/main/view/evento/'+params.id+"/"+text);
+    const redirigirEditar = () =>{
+      router.push('/main/view/evento/'+params.id+"/edit");
     }
 
     const back = () =>{
@@ -148,12 +149,29 @@ const ViewEventoPage = ({params}) => {
     <div className='flex w-full min-h-screen bg-[#F2F2F2] justify-center align-middle items-center p-7'>
       <div className='flex flex-col bg-[#EAEAEA] border-2 border-black p-6 gap-5 w-5/12'>
             <div className='flex flex-row w-full gap-1 align-bottom items-start justify-left'>
-                <div className='flex text-3xl text-start text-black'>{evento?.nombre}</div>
-                <div className='flex text-xs text-start text-black mb-1'>({evento?.fecha})</div>
+                <div className='flex text-3xl text-start text-black hover:text-gray-600 hover:underline cursor-pointer' onClick={() => redirigirEditar}>{evento?.nombre}</div>
+                <div className='flex text-xs text-start text-black mb-1 hover:text-gray-600 hover:underline cursor-pointer' onClick={() => redirigirEditar}>({evento?.fecha})</div>
             </div>
 
             <div className='flex text-xl text-start text-black'>Progreso</div>
+              {
+                equipos.length === 0 ?
+                <></> :
 
+                <div className='flex w-full flex-row justify-center align-middle items-center'>
+                {equipos.map((equipo, index) =>
+                <div className='flex w-full justify-center align-middle items-center text-xs text-black text-center' key={index}>
+                    {equipo.nombre}
+                </div> )}
+                </div>
+              }
+              {
+                actividades.length === 0 ?
+                <></> :
+                actividades.map((actividadLista, index) =>
+                  <FilaProgresoBox actividad={actividadLista} equipos={equipos} key={index}/>
+                )
+              }
             <div className='flex text-xl text-start text-black'>Actividades</div>
             <div className='flex flex-col w-full gap-5 justify-center align-middle items-center border-black border-2'>
               {actividades.length === 0 ?

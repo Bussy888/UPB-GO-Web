@@ -16,7 +16,7 @@ const EquipoBox = (params) =>{
     }
 
     return(
-        <div className='flex flex-col w-4/5 justify-center align-middle items-center gap-4' key={index}>
+        <div className='flex flex-col w-4/5 justify-center align-middle items-center gap-4' >
                   <div className='flex flex-row w-full'>
                     <div className='flex text-start text-black w-2/3 text-xs font-semibold'>
                     {equipo.nombre}

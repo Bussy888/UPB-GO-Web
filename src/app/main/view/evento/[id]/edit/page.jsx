@@ -3,88 +3,75 @@ import React from 'react';
 import { useEffect} from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth, useUser} from 'reactfire';
+import { useForm } from "react-hook-form";
+import { useUserContext } from '@/app/layout';
 import {useFirestore, useFirestoreCollectionData} from "reactfire";
 import {collection, addDoc, setDoc, doc, getDoc} from "firebase/firestore";
-import { useUserContext } from '@/app/layout';
-import ActividadPrueba from '@/utils/ActividadPrueba';
-import { dateToString, stringDate } from '@/utils/Date';
-const EventosPage = () => {
+import { dateToString } from '@/utils/Date';
+const EditEventPage = ({params}) => {
     const auth = useAuth();
     const router = useRouter();
-    const {user, setUser} = useUserContext();
     const firestore = useFirestore();
+    const [evento, setEvento] = useState();
+    const {user, setUser} = useUserContext();
+
+  const { register, watch, formState: { errors }, handleSubmit} = useForm({defaultValues: {admin: false}});
+
+  const postData = async (updateEvento) =>{
+    const eventoRef = doc(firestore, "eventos", params.id);
+    const eventoDoc = await updateDoc(eventoRef, updateEvento)
+    console.log(eventoDoc)
     
-    
-    const postData = async (evento) =>{
-      const userRef = doc(firestore, "users", user?.uid)
-      const updateResponse = await updateDoc(userRef, {
-        eventos: increment(1)
-      })
-      console.log(updateResponse);
-      const userDoc = await getDoc(userRef);
-      const userData = userDoc.data()
-      const idEvento=user?.uid+"Evento"+userData.eventos;
-
-      const responseSet = await setDoc(doc(firestore, "eventos", idEvento),evento);
-      console.log(responseSet)
-
-      const actividadPrueba = await setDoc(doc(firestore, "eventos/"+idEvento+"/actividades", idEvento+"Actividad"+actividad.posicion),{
-        codigo: ActividadPrueba.codigo,
-        descripcion: ActividadPrueba.descripcion,
-        nombre_carta: ActividadPrueba.nombre_carta,
-        nombre_modelo: ActividadPrueba.nombre_modelo,
-        pista: ActividadPrueba.pista,
-        posicion: ActividadPrueba.posicion,
-        evento_id: idEvento
-      });
-      console.log(actividadPrueba)
-
-      const primerEquipo = await addDoc(
-        collection(firestore, "eventos/"+idEvento+"/equipos"),
-        {
-          secuencia: "0",
-          nombre: "Rojo",
-          asignado: false,
-          evento_id: idEvento
-        }
-      )
-      console.log(primerEquipo.data());
+    router.push('/main/view/evento/'+params.id);
+}
+const onSubmit = (data) =>{
+    const eventoUpdate ={
+        nombre: data.nombre,
+        fecha: dateToString(data.fecha)
     }
+    postData(eventoUpdate);
+}
 
-    const onSubmit = (data) =>{
-      const evento ={
-          nombre: data.nombre,
-          fecha: dateToString(data.fecha),
-          user_id: user?.uid,
-          //TODO: CREADOR DE SHORT CRYPTS
-          codigo: "algo123"
-      }
-      postData(evento);
+  const back = () =>{
+    router.push('/main/view/evento/'+params.id);
   }
+
+  const loadEvento = async () =>{
+    const eventoRef = doc(firestore, "eventos", params.id);
+    const eventoDoc = await getDoc(eventoRef);
+    const eventoData = eventoDoc.data();
+    const newEvent = {
+      id: eventoDoc.id,
+      nombre: eventoData.nombre,
+      fecha: eventoData.fecha,
+      userId: eventoData.user_id,
+      codigo: eventoData.codigo,
+      cantidadActividades: eventoData.cantidad_actividades
+    }
+    console.log(newEvent)
+    setEvento(newEvent);
+  }
+
   useEffect(() => {
     //TODO: add context to save user there
     if(!auth.currentUser){
         router.push('/main/login');
     }else{
-        console.log("hola");
+        loadEvento();
     }
   }, [])
-
-  const back = () =>{
-    router.push('/main/start/eventos');
-  }
 
   return (
     <div className='flex w-full min-h-screen bg-[#F2F2F2] justify-center align-middle items-center'>
       <form className='flex flex-col bg-[#EAEAEA] border-2 border-black py-6 px-6 gap-10 justify-center align-middle items-center w-5/12' onSubmit={handleSubmit(onSubmit)}>
-        <div className='flex text-black text-2xl font-normal text-start w-full'>Nuevo Evento</div>
+        <div className='flex text-black text-2xl font-normal text-start w-full'>Editar Evento</div>
         <div className='flex flex-col border-2 border-black p-5 gap-5 w-full bg-[#f6f6f6]'>
                     <div className='flex flex-col'>
                         <label className=" text-xl text-black mb-5 font-medium">Nombre:</label>
                         <input
                             type="text"
                             className=" w-full text-base p-4 text-black bg-[#E1E1E1]"
-                            placeholder="Ingrese una pregunta o actividad"
+                            value={evento?.nombre}
                             {...register('nombre', {
                                 required: true
                             })}
@@ -95,15 +82,13 @@ const EventosPage = () => {
                         <label className=" text-xl text-black mb-5 font-medium">Fecha:</label>
                         <input
                             type="date"
+                            value={evento?.fecha}
                             className=" w-full text-base p-4 text-black bg-[#E1E1E1]"
-                            min={stringDate()}
-                            placeholder="Donde encontrarán la actividad los participantes"
                             {...register('fecha', {
-                              valueAsDate: true,
-                              required: true
+                                required: true
                             })}
                         />
-                        {errors.fecha?.type === 'required' && <h1 className=" text-base text-red-700">*Debe elegir una fecha</h1>}
+                        {errors.fecha?.type === 'required' && <h1 className=" text-base text-red-700">*Debe llenar este campo</h1>}
                     </div>
         </div>
         <div className='flex w-full justify-center items-center align-middle flex-row gap-2'>
@@ -115,4 +100,4 @@ const EventosPage = () => {
   )
 }
 
-export default EventosPage;
+export default EditEventPage;

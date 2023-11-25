@@ -16,7 +16,7 @@ const ActivityBox = (params) =>{
     }
 
     return(
-        <div className='flex flex-col w-full justify-center align-middle items-center p-5 gap-5' key={index}>
+        <div className='flex flex-col w-full justify-center align-middle items-center p-5 gap-5'>
                 <div className='flex flex-row w-full justify-center align-middle items-center'>
                   <div className='flex w-full text-base text-black'>
                     # {actividad.posicion} {actividad.descripcion}
