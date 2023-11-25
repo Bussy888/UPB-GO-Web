@@ -58,7 +58,7 @@ const EventosPage = () => {
             <div className=" text-xl text-black font-medium text-center">Puedes crear tu primer evento haciendo click en 'Añadir'</div>
             </div>:
             
-            eventos.map((eventoLista, index) => <EventBox evento={eventoLista} index={index} changed={changed} setChanged={setChanged}></EventBox>)
+            eventos.map((eventoLista, index) => <EventBox evento={eventoLista} key={index} changed={changed} setChanged={setChanged}></EventBox>)
             
             }
           

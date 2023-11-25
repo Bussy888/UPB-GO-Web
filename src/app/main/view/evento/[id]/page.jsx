@@ -6,6 +6,8 @@ import { useAuth, useUser} from 'reactfire';
 import { useUserContext } from '@/app/layout';
 import {useFirestore, useFirestoreCollectionData} from "reactfire";
 import {collection, addDoc, setDoc, doc, getDocs, getDoc, query, where} from "firebase/firestore";
+import ActivityBox from '../../components/activityBox';
+import EquipoBox from '../../components/equipoBox';
 
 const ViewEventoPage = ({params}) => {
     const auth = useAuth();
@@ -14,6 +16,7 @@ const ViewEventoPage = ({params}) => {
     const firestore = useFirestore();
     const eventosCollection = collection(firestore, "eventos");
     const [actividades, setActividades] = useState([]);
+    const [equipos, setEquipos] = useState([]);
     const [evento, setEvento] = useState();
     const [changed, setChanged] = useState(true)
 
@@ -21,7 +24,27 @@ const ViewEventoPage = ({params}) => {
         return a.posicion - b.posicion
       }
 
-    const loadActividades = async (eventoId) =>{
+      const loadEquipos = async (eventoId) =>{
+        const equiposCollection = collection(firestore, "eventos/"+eventoId+"/equipos");
+        const docsEquipos = await getDocs(equiposCollection);
+        if(docsEquipos.docs.length >0){
+          const aux = docsEquipos.docs.map(doc => {
+            const data = doc.data();
+            const newEquipo = {
+              id: doc.id,
+              secuencia: data.secuencia,
+              nombre: data.nombre,
+              asignado: data.asignado
+            }
+            return newEquipo;
+          });
+          console.log(aux)
+          setEquipos(aux);
+        }
+        
+      }
+
+      const loadActividades = async (eventoId) =>{
         const actividadesCollection = collection(firestore, "eventos/"+eventoId+"/actividades");
         const docsActividades = await getDocs(actividadesCollection);
         const aux = docsActividades.docs.map(doc => {
@@ -58,6 +81,7 @@ const ViewEventoPage = ({params}) => {
         console.log(newEvent)
         setEvento(newEvent);
         await loadActividades(newEvent.id);
+        await loadEquipos(newEvent.id);
     }
 
     const deleteActivity = async (id) =>{
@@ -90,6 +114,15 @@ const ViewEventoPage = ({params}) => {
       setChanged(!changed);
     }
 
+    const deleteEquipo = async (equipoId) =>{
+      const response = await deleteDoc(doc(firestore, "eventos/"+evento.id+"/equipos", equipoId));
+    }
+
+    const startEquipoDeletion = (equipoId) =>{
+      deleteEquipo(equipoId);
+      setChanged(!changed);
+    }
+
     useEffect(() => {
       if(!user){
           router.push('/main/login');
@@ -97,6 +130,14 @@ const ViewEventoPage = ({params}) => {
           loadEvento();
       }
     }, [changed])
+
+    const redirigirCrear = (text) =>{
+      router.push('/main/view/create/'+text);
+    }
+
+    const redirigirEditar = (text) =>{
+      router.push('/main/view/evento/'+params.id+"/"+text);
+    }
 
     const back = () =>{
       router.push('/main/start/eventos');
@@ -119,32 +160,25 @@ const ViewEventoPage = ({params}) => {
               :
             
               actividades.map((actividadLista, index) => 
-              <div className='flex flex-col w-full justify-center align-middle items-center p-5 gap-5'>
-                <div className='flex flex-row w-full justify-center align-middle items-center'>
-                  <div className='flex w-full text-base text-black w-4/5' key={index}>
-                    # {actividadLista.posicion} {actividadLista.descripcion}
-                  </div>
-                  <div className='flex w-full text-xs text-right text-black underline hover:text-gray-600 cursor-pointer'>
-                    Editar
-                  </div>
-                </div>
-                <div className='w-full px-7 py-5 justify-left align-start items-start text-left bg-[#cfdee3]'>
-                  Código: {actividadLista.codigo}
-                </div>
-                {
-                  actividadLista.posicion !== 0 ? <></>
-                  :
-                  <div className='flex w-full justify-center align-middle items-center'>
-                    <button className=' flex text-xs font-normal bg-[#CB2F2F] py-4 px-6 text-white justify-center items-center align-middle' onClick={() => startDeletion(actividadLista)}>Eliminar</button>
-                  </div>
-                }
-                <button className=' flex text-xl font-base w-1/3 bg-[#929292] px-5 py-6 text-white justify-center items-center align-middle' onClick={() =>}>Añadir</button>
-              </div>
+                <ActivityBox key={index} actividad={actividadLista} eventoId={params.id} startDeletion={startDeletion}/>
               )
-            
               }
-
+              <button className=' flex text-xl font-base w-1/3 bg-[#929292] px-5 py-6 text-white justify-center items-center align-middle' onClick={() => redirigirCrear("activity")}>Añadir</button>
             </div>
+            
+            <div className='flex text-xl text-start text-black'>Equipos</div>
+            <div className='flex flex-col w-full gap-5 justify-center align-middle items-center border-black border-2'>
+              {
+                equipos.length===0 ?
+                <></>
+                :
+                equipos.map((equipo, index) => 
+                  <EquipoBox key={index} equipo={equipo} eventoId={params.id} startEquipoDeletion={startEquipoDeletion} />
+                )
+              }
+              <button className=' flex text-xl font-base w-1/3 bg-[#929292] px-5 py-6 text-white justify-center items-center align-middle' onClick={() => redirigirCrear("equipo")}>Añadir</button>
+            </div>
+
       
         <div className='flex w-full justify-center items-center align-middle flex-row gap-2'>
           <button className=' flex text-xl font-medium w-4/5 h-9 bg-[#929292] px-5 py-7 text-white justify-center items-center align-middle' onClick={()=> back()}>Atrás</button>
