@@ -31,7 +31,9 @@ const EventBox = (evento) => {
     const responseSet = await setDoc(doc(firestore, "eventos",idEventoCopia),{
       fecha: evento.evento.fecha,
       nombre: (evento.evento.nombre+" copia"),
-      user_id: user?.uid
+      userId: user?.uid,
+      //TODO: CREADOR DE SHORT CRYPTS
+      codigo: "algo"
     });
     console.log(responseSet)
     actividades.map(
@@ -43,7 +45,8 @@ const EventBox = (evento) => {
           pista: actividad.pista,
           posicion: actividad.posicion,
           nombreCarta: actividad.nombre_carta,
-          nombreModelo: actividad.nombre_modelo
+          nombreModelo: actividad.nombre_modelo,
+          eventoId: idEventoCopia
         });
       }
     )
@@ -81,7 +84,10 @@ const EventBox = (evento) => {
         codigo: data.codigo,
         descripcion: data.descripcion,
         pista: data.pista,
-        posicion: data.posicion
+        posicion: data.posicion,
+        nombreCarta: data.nombre_carta,
+        nombreModelo: data.nombre_modelo,
+        eventoId: data.evento_id
       }
       return newActivity;
     });
