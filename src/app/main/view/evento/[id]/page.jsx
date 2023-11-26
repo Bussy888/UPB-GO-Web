@@ -134,7 +134,7 @@ const ViewEventoPage = ({params}) => {
     }, [changed])
 
     const redirigirCrear = (text) =>{
-      router.push('/main/view/create/'+text+'/'+params.id);
+      router.push('/main/create/'+text+'/'+params.id);
     }
 
     const redirigirEditar = () =>{
@@ -154,13 +154,17 @@ const ViewEventoPage = ({params}) => {
             </div>
 
             <div className='flex text-xl text-start text-black'>Progreso</div>
+            <div className='flex flex-col'>
               {
                 equipos.length === 0 ?
                 <></> :
 
-                <div className='flex w-full flex-row justify-center align-middle items-center'>
+                <div className='flex w-full flex-row justify-center align-middle items-center border-2'>
+                  <div className='flex flex-row w-full justify-center text-xs font-semibold text-black align-middle items-center py-4'>
+                    Actividades\Equipos
+                  </div>
                 {equipos.map((equipo, index) =>
-                <div className='flex w-full justify-center align-middle items-center text-xs text-black text-center' key={index}>
+                <div className='flex w-full justify-center align-middle items-center text-base text-black text-center bg-[#cfdee3] py-4 border-r-2' key={index}>
                     {equipo.nombre}
                 </div> )}
                 </div>
@@ -169,11 +173,14 @@ const ViewEventoPage = ({params}) => {
                 actividades.length === 0 ?
                 <></> :
                 actividades.map((actividadLista, index) =>
-                  <FilaProgresoBox actividad={actividadLista} equipos={equipos} key={index}/>
+                
+                  <FilaProgresoBox actividad={actividadLista} equipos={equipos} eventoId={evento.id} key={index}/>
+                  
                 )
               }
+              </div>
             <div className='flex text-xl text-start text-black'>Actividades</div>
-            <div className='flex flex-col w-full gap-5 justify-center align-middle items-center border-black border-2'>
+            <div className='flex flex-col w-full gap-5 justify-center align-middle items-center border-black border-2 p-4'>
               {actividades.length === 0 ?
               <></>
               :
@@ -182,11 +189,11 @@ const ViewEventoPage = ({params}) => {
                 <ActivityBox key={index} actividad={actividadLista} eventoId={params.id} startDeletion={startDeletion}/>
               )
               }
-              <button className=' flex text-xl font-base w-1/3 bg-[#929292] px-5 py-6 text-white justify-center items-center align-middle' onClick={() => redirigirCrear("activity")}>Añadir</button>
+              <button className=' flex text-xl font-base w-1/3 bg-[#929292] px-5 py-4 text-white justify-center items-center align-middle' onClick={() => redirigirCrear("activity")}>Añadir</button>
             </div>
             
             <div className='flex text-xl text-start text-black'>Equipos</div>
-            <div className='flex flex-col w-full gap-5 justify-center align-middle items-center border-black border-2'>
+            <div className='flex flex-col w-full gap-5 justify-center align-middle items-center border-black border-2 p-4'>
               {
                 equipos.length===0 ?
                 <></>
@@ -195,7 +202,7 @@ const ViewEventoPage = ({params}) => {
                   <EquipoBox key={index} equipo={equipo} eventoId={params.id} startEquipoDeletion={startEquipoDeletion} />
                 )
               }
-              <button className=' flex text-xl font-base w-1/3 bg-[#929292] px-5 py-6 text-white justify-center items-center align-middle' onClick={() => redirigirCrear("equipo")}>Añadir</button>
+              <button className=' flex text-xl font-base w-1/3 bg-[#929292] px-5 py-4 text-white justify-center items-center align-middle' onClick={() => redirigirCrear("equipo")}>Añadir</button>
             </div>
 
       

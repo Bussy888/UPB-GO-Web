@@ -3,17 +3,17 @@ import React from 'react';
 import { useEffect, useState} from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth, useUser} from 'reactfire';
-import { useUserContext } from '../../../../layout';
+import { useUserContext } from '@/app/layout';
 import {useFirestore, useFirestoreCollectionData} from "reactfire";
 import {collection, addDoc, setDoc, doc, getDoc, getDocs, where, deleteDoc, getDocFromServer, updateDoc, increment} from "firebase/firestore";
 
 const FilaProgresoBox = (params) =>{
-    const {actividad, equipos} = params;
+    const {actividad, equipos, eventoId} = params;
     const firestore = useFirestore();
     const [registros, setRegistros] = useState([]);
 
     const loadRegistros = async () =>{
-        const registrosCollection = collection(firestore, "eventos/"+eventoId+"/actividades/"+actividad.id+"/registros");
+        const registrosCollection = collection(firestore, "eventos/"+params.eventoId+"/actividades/"+actividad.id+"/registros");
         const docsRegistros = await getDocs(registrosCollection);
         const aux = docsRegistros.docs.map(doc => {
           const data = doc.data();
@@ -24,7 +24,7 @@ const FilaProgresoBox = (params) =>{
           return newRegistro;
         });
         console.log(aux)
-        setRegistros(sortedAux);
+        setRegistros(aux);
     }
 
     useEffect(() => {
@@ -32,7 +32,10 @@ const FilaProgresoBox = (params) =>{
     }, [])
 
     return(
-        <div className='flex flex-row w-full justify-center align-middle items-center'>
+        <div className='flex flex-row w-full justify-center align-middle items-center border-2'>
+            <div className='flex w-full justify-center text-xs font-semibold text-black align-middle items-center bg-[#cfdee3] py-4 border-r-2'>
+            Actividad #{actividad.posicion}
+            </div>
             {equipos.length ===0 ?
             <></> :
 
@@ -41,7 +44,7 @@ const FilaProgresoBox = (params) =>{
                     {registros.length === 0 ? <></>
                     :
                         registros.filter(registro => registro.id === equipo.id).map((registro, index) =>
-                            <div className='flex w-full text-black text-xs text-center' key={index}>
+                            <div className='flex w-full justify-center align-middle items-center text-black text-xs text-center bg-[#cfdee3] py-4 border-r-2' key={index}>
                                 {registro.horaRegistro}
                             </div>
                         )
