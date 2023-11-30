@@ -1,6 +1,6 @@
 "use client"
 import React from 'react';
-import { useEffect} from 'react';
+import { useEffect, useState} from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth, useUser} from 'reactfire';
 import { useForm } from "react-hook-form";
@@ -19,13 +19,13 @@ const CreateActivityPage = ({params}) => {
   const postData = async (equipo) =>{
     const equipoCollection = collection(firestore, "eventos/"+params.id+"/equipos")
     const equipoDoc = await addDoc(equipoCollection, equipo);
-    console.log(equipoDoc.data())
+    console.log(equipoDoc)
     
     router.push('/main/view/evento/'+params.id);
 }
 const onSubmit = (data) =>{
     const equipo ={
-        nombre: data.nombre,
+        nombre: data.nombre.toLowerCase(),
         secuencia: data.secuencia,
         asignado: false,
         evento_id: evento.id
@@ -93,7 +93,7 @@ const onSubmit = (data) =>{
                     </div>
         </div>
         <div className='flex w-full justify-center items-center align-middle flex-row gap-2'>
-          <div className=' flex text-xl font-medium w-1/3 h-9 bg-[#CDCDCD] px-5 py-6 text-stone-600 justify-center items-center align-middle' onClick={() => back()}>Atrás</div>
+          <div className=' flex text-xl font-medium w-1/3 h-9 bg-[#CDCDCD] px-5 py-6 text-stone-600 justify-center items-center align-middle cursor-pointer' onClick={() => back()}>Atrás</div>
           <button className=' flex text-xl font-medium w-1/3 h-9 bg-[#929292] px-5 py-6 text-white justify-center items-center align-middle' type='submit'>Guardar</button>
         </div>
       </form>

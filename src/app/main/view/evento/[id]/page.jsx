@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth, useUser} from 'reactfire';
 import { useUserContext } from '@/app/layout';
 import {useFirestore, useFirestoreCollectionData} from "reactfire";
-import {collection, addDoc, setDoc, doc, getDocs, getDoc, query, where} from "firebase/firestore";
+import {collection, addDoc, setDoc, doc, getDocs, getDoc, query, where, updateDoc, increment, deleteDoc} from "firebase/firestore";
 import ActivityBox from '../../components/activityBox';
 import EquipoBox from '../../components/equipoBox';
 import FilaProgresoBox from '../../components/filaProgresoBox';
@@ -96,7 +96,7 @@ const ViewEventoPage = ({params}) => {
         {
           const activityRef = doc(firestore, "eventos/"+evento.id+"/actividades", actividad.id);
           await updateDoc(activityRef, {
-            posicion: decrement(1)
+            posicion: increment(-1)
           })
         }
       )
@@ -105,7 +105,7 @@ const ViewEventoPage = ({params}) => {
     const updateCantidadActividades = async () =>{
       const eventoRef = doc(firestore, "eventos", evento.id);
       const responseEvento = await updateDoc(eventoRef, {
-        cantidad_actividades: decrement(1)
+        cantidad_actividades: increment(-1)
       })
     }
 
@@ -149,8 +149,8 @@ const ViewEventoPage = ({params}) => {
     <div className='flex w-full min-h-screen bg-[#F2F2F2] justify-center align-middle items-center p-7'>
       <div className='flex flex-col bg-[#EAEAEA] border-2 border-black p-6 gap-5 w-5/12'>
             <div className='flex flex-row w-full gap-1 align-bottom items-start justify-left'>
-                <div className='flex text-3xl text-start text-black hover:text-gray-600 hover:underline cursor-pointer' onClick={() => redirigirEditar}>{evento?.nombre}</div>
-                <div className='flex text-xs text-start text-black mb-1 hover:text-gray-600 hover:underline cursor-pointer' onClick={() => redirigirEditar}>({evento?.fecha})</div>
+                <div className='flex text-3xl text-start text-black hover:text-gray-600 hover:underline cursor-pointer' onClick={() => redirigirEditar()}>{evento?.nombre}</div>
+                <div className='flex text-xs text-start text-black mb-1 hover:text-gray-600 hover:underline cursor-pointer' onClick={() => redirigirEditar()}>({evento?.fecha})</div>
             </div>
 
             <div className='flex text-xl text-start text-black'>Progreso</div>
@@ -165,7 +165,7 @@ const ViewEventoPage = ({params}) => {
                   </div>
                 {equipos.map((equipo, index) =>
                 <div className='flex w-full justify-center align-middle items-center text-base text-black text-center bg-[#cfdee3] py-4 border-r-2' key={index}>
-                    {equipo.nombre}
+                    {equipo.nombre.toUpperCase()}
                 </div> )}
                 </div>
               }

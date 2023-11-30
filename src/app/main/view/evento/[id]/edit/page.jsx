@@ -1,13 +1,13 @@
 "use client"
 import React from 'react';
-import { useEffect} from 'react';
+import { useEffect, useState} from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth, useUser} from 'reactfire';
 import { useForm } from "react-hook-form";
 import { useUserContext } from '@/app/layout';
 import {useFirestore, useFirestoreCollectionData} from "reactfire";
-import {collection, addDoc, setDoc, doc, getDoc} from "firebase/firestore";
-import { dateToString } from '@/utils/Date';
+import {collection, addDoc, setDoc, doc, getDoc, updateDoc} from "firebase/firestore";
+import { dateToString, stringDate } from '@/utils/Date';
 const EditEventPage = ({params}) => {
     const auth = useAuth();
     const router = useRouter();
@@ -48,7 +48,6 @@ const onSubmit = (data) =>{
       codigo: eventoData.codigo,
       cantidadActividades: eventoData.cantidad_actividades
     }
-    console.log(newEvent)
     setEvento(newEvent);
   }
 
@@ -69,10 +68,11 @@ const onSubmit = (data) =>{
                     <div className='flex flex-col'>
                         <label className=" text-xl text-black mb-5 font-medium">Nombre:</label>
                         <input
+                          id="nombre"
                             type="text"
                             className=" w-full text-base p-4 text-black bg-[#E1E1E1]"
-                            value={evento?.nombre}
                             {...register('nombre', {
+                              value: evento?.nombre,
                                 required: true
                             })}
                         />
@@ -82,9 +82,11 @@ const onSubmit = (data) =>{
                         <label className=" text-xl text-black mb-5 font-medium">Fecha:</label>
                         <input
                             type="date"
-                            value={evento?.fecha}
+                            min={stringDate()}
+                            valueAsDate={evento?.fecha}
                             className=" w-full text-base p-4 text-black bg-[#E1E1E1]"
                             {...register('fecha', {
+                              valueAsDate: true,
                                 required: true
                             })}
                         />
@@ -92,7 +94,7 @@ const onSubmit = (data) =>{
                     </div>
         </div>
         <div className='flex w-full justify-center items-center align-middle flex-row gap-2'>
-          <div className=' flex text-xl font-medium w-1/3 h-9 bg-[#CDCDCD] px-5 py-6 text-stone-600 justify-center items-center align-middle' onClick={() => back()}>Atrás</div>
+          <div className=' flex text-xl font-medium w-1/3 h-9 bg-[#CDCDCD] px-5 py-6 text-stone-600 justify-center items-center align-middle cursor-pointer' onClick={() => back()}>Atrás</div>
           <button className=' flex text-xl font-medium w-1/3 h-9 bg-[#929292] px-5 py-6 text-white justify-center items-center align-middle' type='submit'>Guardar</button>
         </div>
       </form>

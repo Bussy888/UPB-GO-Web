@@ -18,14 +18,14 @@ const EquipoBox = (params) =>{
     return(
         <div className='flex flex-col w-3/5 justify-center align-middle items-center gap-4' >
                   <div className='flex flex-row w-full'>
-                    <div className='flex text-start text-black w-3/5 text-xs font-semibold'>
-                    {equipo.nombre}
+                    <div className='flex text-start text-black w-3/5 text-base font-semibold'>
+                    {equipo.nombre.toUpperCase()}
                     </div>
-                    <div className='flex w-1/5 text-xs justify-end text-black font-normal underline hover:text-gray-600 cursor-pointer'
+                    <div className='flex w-1/5 text-xs justify-end align-bottom items-end text-black font-normal underline hover:text-gray-600 cursor-pointer'
                     onClick={() => startEquipoDeletion(equipo.id)}>
                     Eliminar
                     </div>
-                    <div className='flex w-1/5 text-xs justify-end text-black font-normal underline hover:text-gray-600 cursor-pointer'
+                    <div className='flex w-1/5 text-xs justify-end align-bottom items-end text-black font-normal underline hover:text-gray-600 cursor-pointer'
                     onClick={() => redirigirEditar(equipo.id)}>
                     Editar
                     </div>

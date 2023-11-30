@@ -6,18 +6,20 @@ import { useAuth, useUser} from 'reactfire';
 import { useForm } from "react-hook-form";
 import { useUserContext } from '@/app/layout';
 import {useFirestore, useFirestoreCollectionData} from "reactfire";
-import {collection, addDoc, setDoc, doc, getDoc} from "firebase/firestore";
+import {collection, addDoc, setDoc, doc, getDoc, updateDoc, increment} from "firebase/firestore";
+import ShortUniqueId from 'short-unique-id';
 const CreateActivityPage = ({params}) => {
     const auth = useAuth();
     const router = useRouter();
     const firestore = useFirestore();
     const [evento, setEvento] = useState();
     const {user, setUser} = useUserContext();
+    const uid = new ShortUniqueId({length: process.env.UID_LENGTH})
 
   const { register, watch, formState: { errors }, handleSubmit} = useForm({defaultValues: {admin: false}});
 
   const postData = async (actividad) =>{
-    const actividadRef = doc(firestore, "eventos/"+params.id+"/actividades", evento.id+"actividad"+actividad.posicion)
+    const actividadRef = doc(firestore, "eventos/"+params.id+"/actividades", evento.id+"actividad"+uid.rnd())
     const actividadDoc = await setDoc(actividadRef, actividad);
     console.log(actividadDoc)
 
@@ -138,7 +140,7 @@ const onSubmit = (data) =>{
                     </div>
         </div>
         <div className='flex w-full justify-center items-center align-middle flex-row gap-2'>
-          <div className=' flex text-xl font-medium w-1/3 h-9 bg-[#CDCDCD] px-5 py-6 text-stone-600 justify-center items-center align-middle' onClick={() => back()}>Atrás</div>
+          <div className=' flex text-xl font-medium w-1/3 h-9 bg-[#CDCDCD] px-5 py-6 text-stone-600 justify-center items-center align-middle cursor-pointer' onClick={() => back()}>Atrás</div>
           <button className=' flex text-xl font-medium w-1/3 h-9 bg-[#929292] px-5 py-6 text-white justify-center items-center align-middle' type='submit'>Guardar</button>
         </div>
       </form>

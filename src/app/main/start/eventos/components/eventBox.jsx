@@ -6,6 +6,7 @@ import { useAuth, useUser} from 'reactfire';
 import { useUserContext } from '../../../../layout';
 import {useFirestore, useFirestoreCollectionData} from "reactfire";
 import {collection, addDoc, setDoc, doc, getDoc, getDocs, where, deleteDoc, getDocFromServer, updateDoc, increment} from "firebase/firestore";
+import ShortUniqueId from 'short-unique-id';
 const EventBox = (evento) => {
   const auth = useAuth();
   const router = useRouter();
@@ -13,7 +14,10 @@ const EventBox = (evento) => {
   const firestore = useFirestore();
   const eventosCollection = collection(firestore, "eventos");
   const actividadesCollection = collection(firestore, "eventos/"+evento.evento.id+"/actividades");
+  const equiposCollection = collection(firestore, "eventos/"+evento.evento.id+"/equipos");
   const [actividades, setActividades] = useState([]);
+  const uid = new ShortUniqueId({length: process.env.UID_LENGTH})
+  const [changed, setChanged] = useState(false);
 
   const compararPosicion = (a,b) =>{
     return a.posicion - b.posicion
@@ -31,9 +35,9 @@ const EventBox = (evento) => {
     const responseSet = await setDoc(doc(firestore, "eventos",idEventoCopia),{
       fecha: evento.evento.fecha,
       nombre: (evento.evento.nombre+" copia"),
-      userId: user?.uid,
+      user_id: user?.uid,
       //TODO: CREADOR DE SHORT CRYPTS
-      codigo: "algo"
+      codigo: uid.rnd()
     });
     console.log(responseSet)
     actividades.map(
@@ -44,16 +48,29 @@ const EventBox = (evento) => {
           descripcion: actividad.descripcion,
           pista: actividad.pista,
           posicion: actividad.posicion,
-          nombreCarta: actividad.nombre_carta,
-          nombreModelo: actividad.nombre_modelo,
-          eventoId: idEventoCopia
+          nombre_carta: actividad.nombreCarta || null,
+          nombre_modelo: actividad.nombreModelo || null,
+          evento_id: idEventoCopia
         });
       }
     )
+
+    const docsEquipos = await getDocs(equiposCollection);
+    const aux = docsEquipos.docs.map(async doc => {
+      const data = doc.data();
+      const newEquipo = {
+        asignado: false,
+        evento_id: data.evento_id,
+        nombre: data.nombre,
+        secuencia: data.secuencia
+      }
+      const response = await addDoc(collection(firestore, "eventos/"+idEventoCopia+"/equipos"), newEquipo)
+    });
   }
 
   const copiarEvento = async()=>{
     postData();
+    setChanged(!changed)
   }
 
   const deleteActividades = async() =>{
@@ -72,7 +89,7 @@ const EventBox = (evento) => {
   const startDeletion = () =>{
     deleteActividades();
     deleteEvento();
-    evento.setChanged(!evento.changed)
+    setChanged(!changed)
   }
 
   const loadActividades = async () =>{
@@ -111,14 +128,14 @@ useEffect(() => {
   }else{
       loadActividades();
   }
-}, [])
+}, [evento.changed])
 
   return (
     <>
-      <div className='flex flex-col border-2 border-black bg-[#f6f6f6] w-full' >
+      <div className='flex flex-col border-2 border-black bg-[#f6f6f6] w-full' key={evento.index}>
       <div className='flex flex-col bg-[#f6f6f6] p-5 gap-5 w-full'>
         <div className='flex flex-row'>
-            <div className='flex flex-row w-3/5 gap-1 align-bottom items-end'>
+            <div className='flex flex-row w-4/5 gap-1 align-bottom items-end'>
                 <div className='flex text-2xl text-start text-black'>{evento.evento.nombre}</div>
                 <div className='flex text-xs text-start text-black mb-1'>({evento.evento.fecha})</div>
             </div>
