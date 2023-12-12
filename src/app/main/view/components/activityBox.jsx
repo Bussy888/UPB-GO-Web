@@ -3,15 +3,17 @@ import React from 'react';
 import { useEffect, useState} from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth, useUser} from 'reactfire';
-import { useUserContext } from '@/app/layout';
+import { useActivityContext, useUserContext } from '@/app/layout';
 import {useFirestore, useFirestoreCollectionData} from "reactfire";
 import {collection, addDoc, setDoc, doc, getDoc, getDocs, where, deleteDoc, getDocFromServer, updateDoc, increment} from "firebase/firestore";
 
 const ActivityBox = (params) =>{
     const {actividad, eventoId, startDeletion} = params;
     const router = useRouter();
+    const {activity, setActivity} = useActivityContext();
 
     const redirigirEditar = (text) =>{
+      setActivity(actividad)
         router.push('/main/view/evento/'+eventoId+"/actividad/"+text);
     }
 

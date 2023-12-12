@@ -3,7 +3,7 @@ import React from 'react';
 import { useEffect, useState} from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth, useUser} from 'reactfire';
-import { useUserContext } from '@/app/layout';
+import { useUserContext, useEventoContext} from '@/app/layout';
 import {useFirestore, useFirestoreCollectionData} from "reactfire";
 import {collection, addDoc, setDoc, doc, getDocs, getDoc, query, where, updateDoc, increment, deleteDoc} from "firebase/firestore";
 import ActivityBox from '../../components/activityBox';
@@ -20,6 +20,7 @@ const ViewEventoPage = ({params}) => {
     const [equipos, setEquipos] = useState([]);
     const [evento, setEvento] = useState();
     const [changed, setChanged] = useState(true)
+    const {eventoEdit, setEventoEdit} = useEventoContext();
 
     const compararPosicion = (a,b) =>{
         return a.posicion - b.posicion
@@ -138,6 +139,7 @@ const ViewEventoPage = ({params}) => {
     }
 
     const redirigirEditar = () =>{
+      setEventoEdit(evento);
       router.push('/main/view/evento/'+params.id+"/edit");
     }
 

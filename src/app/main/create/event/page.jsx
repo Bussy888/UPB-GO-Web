@@ -8,12 +8,13 @@ import {collection, addDoc, setDoc, doc, getDoc} from "firebase/firestore";
 import { useUserContext } from '@/app/layout';
 import ActividadPrueba from '@/utils/ActividadPrueba';
 import { dateToString, stringDate } from '@/utils/Date';
+import ShortUniqueId from 'short-unique-id';
 const EventosPage = () => {
     const auth = useAuth();
     const router = useRouter();
     const {user, setUser} = useUserContext();
     const firestore = useFirestore();
-    
+    const uid = new ShortUniqueId({length: process.env.UID_LENGTH})
     
     const postData = async (evento) =>{
       const userRef = doc(firestore, "users", user?.uid)
@@ -56,13 +57,11 @@ const EventosPage = () => {
           nombre: data.nombre,
           fecha: dateToString(data.fecha),
           user_id: user?.uid,
-          //TODO: CREADOR DE SHORT CRYPTS
-          codigo: "algo123"
+          codigo: uid.rnd()
       }
       postData(evento);
   }
   useEffect(() => {
-    //TODO: add context to save user there
     if(!auth.currentUser){
         router.push('/main/login');
     }else{

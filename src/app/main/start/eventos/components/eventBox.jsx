@@ -36,7 +36,6 @@ const EventBox = (evento) => {
       fecha: evento.evento.fecha,
       nombre: (evento.evento.nombre+" copia"),
       user_id: user?.uid,
-      //TODO: CREADOR DE SHORT CRYPTS
       codigo: uid.rnd()
     });
     console.log(responseSet)
