@@ -74,7 +74,9 @@ const onSubmit = (data) =>{
                         <input
                           id="descripcion"
                             type="text"
-                            className=" w-full text-base p-4 text-black bg-[#E1E1E1]"
+                            editable={true}
+                            multiline={true}
+                            className=" w-full min-h-fit h-fit text-base p-4 text-black bg-[#E1E1E1] flex-wrap whitespace-normal"
                             {...register('descripcion', {
                               value: activity.descripcion,
                                 required: true
@@ -115,7 +117,7 @@ const onSubmit = (data) =>{
                             type="text"
                             className=" w-full text-base p-4 text-black bg-[#E1E1E1]"
                             {...register('carta', {
-                              value: activity.carta,
+                              value: activity.nombreCarta,
                                 required: true
                             })}
                         />
@@ -128,7 +130,7 @@ const onSubmit = (data) =>{
                             type="text"
                             className=" w-full text-base p-4 text-black bg-[#E1E1E1]"
                             {...register('modelo', {
-                              value: activity.modelo,
+                              value: activity.nombreModelo,
                                 required: true
                             })}
                         />

@@ -27,7 +27,7 @@ const onSubmit = (data) =>{
     const equipo ={
         nombre: data.nombre.toLowerCase(),
         secuencia: data.secuencia,
-        asignado: false,
+        asignado: Boolean(false),
         evento_id: evento.id
     }
     postData(equipo);
@@ -72,7 +72,7 @@ const onSubmit = (data) =>{
                         <input
                             type="text"
                             className=" w-full text-base p-4 text-black bg-[#E1E1E1]"
-                            placeholder="Ingrese una pregunta o actividad"
+                            placeholder="Ingrese el nombre del equipo"
                             {...register('nombre', {
                                 required: true
                             })}
@@ -84,7 +84,7 @@ const onSubmit = (data) =>{
                         <input
                             type="text"
                             className=" w-full text-base p-4 text-black bg-[#E1E1E1]"
-                            placeholder="Donde encontrarán la actividad los participantes"
+                            placeholder="El orden en el que completarán las actividades"
                             {...register('secuencia', {
                                 required: true
                             })}

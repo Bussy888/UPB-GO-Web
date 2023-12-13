@@ -10,7 +10,7 @@ import {collection, addDoc, setDoc, doc, getDoc, getDocs, where, deleteDoc, getD
 const EquipoBox = (params) =>{
     const {equipo, eventoId, startEquipoDeletion} = params;
     const router = useRouter();
-    const {setEquipo} = useActivityContext();
+    const {setEquipo} = useEquipoContext();
 
     const redirigirEditar = (text) =>{
         setEquipo(equipo);

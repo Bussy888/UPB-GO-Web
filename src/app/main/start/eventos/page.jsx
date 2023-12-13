@@ -34,9 +34,13 @@ const EventosPage = () => {
       setEventos(aux);
     }
 
+    const newEvent = () =>{
+      router.push('/main/create/event');
+    }
+
   useEffect(() => {
     //TODO: add context to save user there
-    if(!auth.currentUser){
+    if(user === null){
         router.push('/main/login');
     }else{
         loadEventos();

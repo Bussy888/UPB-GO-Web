@@ -4,7 +4,7 @@ import { useEffect, useState} from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth, useUser} from 'reactfire';
 import { useForm } from "react-hook-form";
-import { useUserContext } from '@/app/layout';
+import { useEventoContext, useUserContext } from '@/app/layout';
 import {useFirestore, useFirestoreCollectionData} from "reactfire";
 import {collection, addDoc, setDoc, doc, getDoc, updateDoc} from "firebase/firestore";
 import { dateToString, stringDate } from '@/utils/Date';
@@ -14,6 +14,7 @@ const EditEventPage = ({params}) => {
     const firestore = useFirestore();
     const [evento, setEvento] = useState();
     const {user, setUser} = useUserContext();
+    const {eventoEdit, setEventoEdit} = useEventoContext();
 
   const { register, watch, formState: { errors }, handleSubmit} = useForm({defaultValues: {admin: false}});
 
@@ -72,7 +73,7 @@ const onSubmit = (data) =>{
                             type="text"
                             className=" w-full text-base p-4 text-black bg-[#E1E1E1]"
                             {...register('nombre', {
-                              value: evento?.nombre,
+                              value: eventoEdit.nombre,
                                 required: true
                             })}
                         />
@@ -83,7 +84,7 @@ const onSubmit = (data) =>{
                         <input
                             type="date"
                             min={stringDate()}
-                            valueAsDate={evento?.fecha}
+                            valueAsDate={new Date(eventoEdit.fecha)}
                             className=" w-full text-base p-4 text-black bg-[#E1E1E1]"
                             {...register('fecha', {
                               valueAsDate: true,

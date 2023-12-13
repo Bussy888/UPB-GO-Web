@@ -3,8 +3,9 @@ import React from 'react';
 import { useEffect} from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth, useUser} from 'reactfire';
+import { useForm } from "react-hook-form";
 import {useFirestore, useFirestoreCollectionData} from "reactfire";
-import {collection, addDoc, setDoc, doc, getDoc} from "firebase/firestore";
+import {collection, addDoc, setDoc, doc, getDoc, updateDoc, increment} from "firebase/firestore";
 import { useUserContext } from '@/app/layout';
 import ActividadPrueba from '@/utils/ActividadPrueba';
 import { dateToString, stringDate } from '@/utils/Date';
@@ -15,6 +16,7 @@ const EventosPage = () => {
     const {user, setUser} = useUserContext();
     const firestore = useFirestore();
     const uid = new ShortUniqueId({length: process.env.UID_LENGTH})
+    const { register, watch, formState: { errors }, handleSubmit} = useForm();
     
     const postData = async (evento) =>{
       const userRef = doc(firestore, "users", user?.uid)
@@ -29,13 +31,15 @@ const EventosPage = () => {
       const responseSet = await setDoc(doc(firestore, "eventos", idEvento),evento);
       console.log(responseSet)
 
-      const actividadPrueba = await setDoc(doc(firestore, "eventos/"+idEvento+"/actividades", idEvento+"Actividad"+actividad.posicion),{
+      const actividadPrueba = await setDoc(doc(firestore, "eventos/"+idEvento+"/actividades", idEvento+"Actividad"+0),{
         codigo: ActividadPrueba.codigo,
         descripcion: ActividadPrueba.descripcion,
         nombre_carta: ActividadPrueba.nombre_carta,
         nombre_modelo: ActividadPrueba.nombre_modelo,
         pista: ActividadPrueba.pista,
         posicion: ActividadPrueba.posicion,
+        acierto: ActividadPrueba.acierto,
+        fallo: ActividadPrueba.fallo,
         evento_id: idEvento
       });
       console.log(actividadPrueba)
@@ -44,12 +48,11 @@ const EventosPage = () => {
         collection(firestore, "eventos/"+idEvento+"/equipos"),
         {
           secuencia: "0",
-          nombre: "Rojo",
+          nombre: "rojo",
           asignado: false,
           evento_id: idEvento
         }
       )
-      console.log(primerEquipo.data());
     }
 
     const onSubmit = (data) =>{
@@ -57,9 +60,11 @@ const EventosPage = () => {
           nombre: data.nombre,
           fecha: dateToString(data.fecha),
           user_id: user?.uid,
-          codigo: uid.rnd()
+          codigo: uid.rnd(),
+          cantidad_actividades: 1
       }
       postData(evento);
+      router.push('/main/start/eventos');
   }
   useEffect(() => {
     if(!auth.currentUser){
@@ -83,7 +88,7 @@ const EventosPage = () => {
                         <input
                             type="text"
                             className=" w-full text-base p-4 text-black bg-[#E1E1E1]"
-                            placeholder="Ingrese una pregunta o actividad"
+                            placeholder="Ingrese el nombre del evento"
                             {...register('nombre', {
                                 required: true
                             })}

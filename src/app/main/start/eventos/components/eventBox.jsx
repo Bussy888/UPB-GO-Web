@@ -127,7 +127,7 @@ useEffect(() => {
   }else{
       loadActividades();
   }
-}, [evento.changed])
+}, [changed])
 
   return (
     <>
@@ -135,8 +135,8 @@ useEffect(() => {
       <div className='flex flex-col bg-[#f6f6f6] p-5 gap-5 w-full'>
         <div className='flex flex-row'>
             <div className='flex flex-row w-4/5 gap-1 align-bottom items-end'>
-                <div className='flex text-2xl text-start text-black'>{evento.evento.nombre}</div>
-                <div className='flex text-xs text-start text-black mb-1'>({evento.evento.fecha})</div>
+                <div className='flex text-2xl text-start text-black truncate'>{evento.evento.nombre}</div>
+                <div className='flex text-xs text-start text-black mb-1 w-2/5'>({evento.evento.fecha})</div>
             </div>
             <div className='flex flex-row w-2/5 gap-2 items-end justify-end'>
                 <div className='flex text-base text-center text-black underline hover:text-gray-600 cursor-pointer' onClick={() => copiarEvento()}>Copiar</div>
@@ -150,7 +150,7 @@ useEffect(() => {
             :
             
             actividades.map((actividadLista, index) => 
-            <div className='flex w-full text-black' index={index}>
+            <div className='flex w-full text-black h-5 truncate' index={index}>
               # {actividadLista.posicion} {actividadLista.descripcion}
             </div>)
             

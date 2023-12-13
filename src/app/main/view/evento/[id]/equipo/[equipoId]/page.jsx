@@ -29,8 +29,9 @@ const onSubmit = (data) =>{
     const equipoUpdate ={
         secuencia: data.secuencia,
         nombre: data.nombre,
-        asignado: data.asignado
+        asignado: Boolean(data.asignado)
     }
+    console.log(equipoUpdate)
     postData(equipoUpdate);
 }
 
@@ -74,7 +75,7 @@ const onSubmit = (data) =>{
                             type="text"
                             className=" w-full text-base p-4 text-black bg-[#E1E1E1]"
                             {...register('nombre', {
-                              value: activity.nombre,
+                              value: equipo.nombre,
                                 required: true
                             })}
                         />
@@ -86,7 +87,7 @@ const onSubmit = (data) =>{
                           id="secuencia"
                             type="text"
                             className=" w-full text-base p-4 text-black bg-[#E1E1E1]"
-                            {...register('descripcion', {
+                            {...register('secuencia', {
                               value: equipo.secuencia,
                                 required: true
                             })}
@@ -96,8 +97,9 @@ const onSubmit = (data) =>{
                     <div className = 'flex flex-row w-full items-center justify-center align-middle gap-3'>
                           <input 
                                 type='checkbox'
-                                value={equipo.asignado}
-                                {...register("asignado")}/>
+                                {...register("asignado", {
+                                  value: equipo.asignado
+                                })}/>
                           <label className=" text-left font-medium text-black">Asignado</label>
                     </div>
         </div>
