@@ -39,6 +39,8 @@ const onSubmit = (data) =>{
         posicion: evento.cantidadActividades,
         nombre_carta: data.nombreCarta,
         nombre_modelo: data.nombreModelo,
+        acierto: data.acierto,
+        fallo: data.fallo,
         eventoId: evento.id
     }
     postData(actividad);
@@ -137,6 +139,30 @@ const onSubmit = (data) =>{
                             })}
                         />
                         {errors.nombreModelo?.type === 'required' && <h1 className=" text-base text-red-700">*Debe llenar este campo</h1>}
+                    </div>
+                    <div className='flex flex-col'>
+                        <label className=" text-xl text-black mb-5 font-medium">Mensaje de acierto:</label>
+                        <input
+                            type="text"
+                            className=" w-full text-base p-4 text-black bg-[#E1E1E1]"
+                            placeholder="Felicidades"
+                            {...register('acierto', {
+                                required: true
+                            })}
+                        />
+                        {errors.acierto?.type === 'required' && <h1 className=" text-base text-red-700">*Debe llenar este campo</h1>}
+                    </div>
+                    <div className='flex flex-col'>
+                        <label className=" text-xl text-black mb-5 font-medium">Mensaje de fallo:</label>
+                        <input
+                            type="text"
+                            className=" w-full text-base p-4 text-black bg-[#E1E1E1]"
+                            placeholder="Vuelve a intentarlo"
+                            {...register('fallo', {
+                                required: true
+                            })}
+                        />
+                        {errors.fallo?.type === 'required' && <h1 className=" text-base text-red-700">*Debe llenar este campo</h1>}
                     </div>
         </div>
         <div className='flex w-full justify-center items-center align-middle flex-row gap-2'>

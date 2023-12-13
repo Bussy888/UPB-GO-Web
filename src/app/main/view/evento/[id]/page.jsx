@@ -60,6 +60,8 @@ const ViewEventoPage = ({params}) => {
             posicion: data.posicion,
             nombreCarta: data.nombre_carta,
             nombreModelo: data.nombre_modelo,
+            acierto: data.acierto,
+            fallo: data.fallo,
             eventoId: data.evento_id
           }
           return newActivity;
