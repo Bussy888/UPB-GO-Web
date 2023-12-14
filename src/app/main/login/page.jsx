@@ -4,8 +4,10 @@ import { useForm } from "react-hook-form";
 import { useAuth} from 'reactfire';
 import {signInWithEmailAndPassword} from "firebase/auth";
 import { useRouter } from 'next/navigation';
+import Modal from 'react-modal';
 import { useUserContext } from '../../layout';
 import { useEffect} from 'react';
+import { customStyles } from '@/utils/CustomStyles';
 const LoginPage = () =>{
 
     const {user, setUser} = useUserContext();
@@ -18,6 +20,16 @@ const LoginPage = () =>{
     const { register, formState: { errors }, handleSubmit} = useForm();
     const auth = useAuth();
     const router = useRouter();
+    const [isOpen, setIsOpen] = useState(false);
+    const showModal = (e) => {
+        e.preventDefault();
+        setIsOpen(!isOpen)
+        const closeModal = () => {
+          setIsOpen(false);
+        }
+        setTimeout(closeModal, 3000);
+    }
+    
     const signIn = async (email, password) =>{
         //"esteEselPassword"
         const response = await signInWithEmailAndPassword(auth,email,password);
@@ -32,7 +44,12 @@ const LoginPage = () =>{
             user:data.email,
             password:data.password
         }
-        signIn(user.user, user.password);
+        try {
+            signIn(user.user, user.password);
+        } catch(error){
+
+        }
+        
     }
     
     return (
@@ -66,6 +83,9 @@ const LoginPage = () =>{
                     <button className=' flex text-xl font-medium w-76 h-9 bg-[#929292] px-5 py-6 text-white justify-center items-center align-middle' type="submit">Continuar</button>
 
                 </form>
+                <Modal isOpen={isOpen} style={customStyles}>
+                    <div className="texto-normal font-normal flex w-full h-full justify-center items-center">Contraseña o email incorrectos</div>
+                </Modal>
                 
             </div>
         </div>

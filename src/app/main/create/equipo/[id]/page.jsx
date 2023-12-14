@@ -6,12 +6,13 @@ import { useAuth, useUser} from 'reactfire';
 import { useForm } from "react-hook-form";
 import { useUserContext } from '@/app/layout';
 import {useFirestore, useFirestoreCollectionData} from "reactfire";
-import {collection, addDoc, setDoc, doc, getDoc} from "firebase/firestore";
+import {collection, addDoc, setDoc, doc, getDoc, getDocs} from "firebase/firestore";
 const CreateActivityPage = ({params}) => {
     const auth = useAuth();
     const router = useRouter();
     const firestore = useFirestore();
     const [evento, setEvento] = useState();
+    const [equipos, setEquipos] = useState([]);
     const {user, setUser} = useUserContext();
 
   const { register, watch, formState: { errors }, handleSubmit} = useForm({defaultValues: {admin: false}});
@@ -37,6 +38,24 @@ const onSubmit = (data) =>{
     router.push('/main/view/evento/'+params.id);
   }
 
+  const loadEquipos = async (eventoId) =>{
+    const equiposCollection = collection(firestore, "eventos/"+eventoId+"/equipos");
+    const docsEquipos = await getDocs(equiposCollection);
+    if(docsEquipos.docs.length >0){
+      const aux = docsEquipos.docs.map(doc => {
+        const data = doc.data();
+        const newEquipo = {
+          id: doc.id,
+          nombre: data.nombre
+        }
+        return newEquipo;
+      });
+      console.log(aux)
+      setEquipos(aux);
+    }
+    
+  }
+
   const loadEvento = async () =>{
     const eventoRef = doc(firestore, "eventos", params.id);
     const eventoDoc = await getDoc(eventoRef);
@@ -51,6 +70,7 @@ const onSubmit = (data) =>{
     }
     console.log(newEvent)
     setEvento(newEvent);
+    loadEquipos(newEvent.id)
   }
 
   useEffect(() => {
