@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { useAuth, useUser} from 'reactfire';
 import { useForm } from "react-hook-form";
 import { useUserContext } from '@/app/layout';
+import { customStyles } from '@/utils/CustomStyles';
+import Modal from 'react-modal';
 import {useFirestore, useFirestoreCollectionData} from "reactfire";
 import {collection, addDoc, setDoc, doc, getDoc, getDocs} from "firebase/firestore";
 const CreateActivityPage = ({params}) => {
@@ -17,6 +19,16 @@ const CreateActivityPage = ({params}) => {
 
   const { register, watch, formState: { errors }, handleSubmit} = useForm({defaultValues: {admin: false}});
 
+  const [isOpen, setIsOpen] = useState(false);
+  const showModal = (e) => {
+        e.preventDefault();
+        setIsOpen(!isOpen)
+        const closeModal = () => {
+          setIsOpen(false);
+        }
+        setTimeout(closeModal, 500);
+  }
+
   const postData = async (equipo) =>{
     const equipoCollection = collection(firestore, "eventos/"+params.id+"/equipos")
     const equipoDoc = await addDoc(equipoCollection, equipo);
@@ -24,14 +36,19 @@ const CreateActivityPage = ({params}) => {
     
     router.push('/main/view/evento/'+params.id);
 }
-const onSubmit = (data) =>{
+const onSubmit = (data, event) =>{
     const equipo ={
         nombre: data.nombre.toLowerCase(),
         secuencia: data.secuencia,
         asignado: Boolean(false),
         evento_id: evento.id
     }
-    postData(equipo);
+    const equals = equipos.filter(equipoList => equipoList.nombre === equipo.nombre).length;
+    if(equals > 0){
+      showModal(event);
+    } else{
+      postData(equipo);
+    }
 }
 
   const back = () =>{
@@ -117,6 +134,9 @@ const onSubmit = (data) =>{
           <button className=' flex text-xl font-medium w-1/3 h-9 bg-[#929292] px-5 py-6 text-white justify-center items-center align-middle' type='submit'>Guardar</button>
         </div>
       </form>
+      <Modal isOpen={isOpen} style={customStyles}>
+        <div className="texto-normal font-normal flex w-full h-full justify-center items-center">Ya existe un equipo con ese nombre</div>
+      </Modal>
     </div>
   )
 }

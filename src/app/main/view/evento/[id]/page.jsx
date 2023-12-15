@@ -158,7 +158,7 @@ const ViewEventoPage = ({params}) => {
             </div>
 
             <div className='flex text-xl text-start text-black'>Progreso</div>
-            <div className='flex flex-col'>
+            <div className='flex flex-col border-black border-2 bg-[#F2F2F2]'>
               {
                 equipos.length === 0 ?
                 <></> :
@@ -184,7 +184,7 @@ const ViewEventoPage = ({params}) => {
               }
               </div>
             <div className='flex text-xl text-start text-black'>Actividades</div>
-            <div className='flex flex-col w-full gap-5 justify-center align-middle items-center border-black border-2 p-4'>
+            <div className='flex flex-col w-full gap-5 justify-center align-middle items-center border-black border-2 p-4 bg-[#F2F2F2]'>
               {actividades.length === 0 ?
               <></>
               :
@@ -197,7 +197,7 @@ const ViewEventoPage = ({params}) => {
             </div>
             
             <div className='flex text-xl text-start text-black'>Equipos</div>
-            <div className='flex flex-col w-full gap-5 justify-center align-middle items-center border-black border-2 p-4'>
+            <div className='flex flex-col w-full gap-5 justify-center align-middle items-center border-black border-2 p-4 bg-[#F2F2F2]'>
               {
                 equipos.length===0 ?
                 <></>
@@ -211,7 +211,7 @@ const ViewEventoPage = ({params}) => {
 
       
         <div className='flex w-full justify-center items-center align-middle flex-row gap-2'>
-          <button className=' flex text-xl font-medium w-4/5 h-9 bg-[#929292] px-5 py-7 text-white justify-center items-center align-middle' onClick={()=> back()}>Atrás</button>
+          <button className=' flex text-xl font-medium w-4/5 h-9 bg-[#CDCDCD] px-5 py-7 text-stone-600 justify-center items-center align-middle' onClick={()=> back()}>Atrás</button>
         </div>
         
       </div>

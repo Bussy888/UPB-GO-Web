@@ -32,7 +32,7 @@ const FilaProgresoBox = (params) =>{
     }, [])
 
     return(
-        <div className='flex flex-row w-full justify-center align-middle items-center border-2'>
+        <div className='flex flex-row w-full justify-center align-middle items-center border-b-2'>
             <div className='flex w-full justify-center text-xs font-semibold text-black align-middle items-center bg-[#cfdee3] py-4 border-r-2'>
             Actividad #{actividad.posicion}
             </div>

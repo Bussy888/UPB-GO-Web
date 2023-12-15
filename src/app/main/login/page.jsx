@@ -1,12 +1,12 @@
 "use client"
 import React from 'react';
+import { useEffect, useState} from 'react';
 import { useForm } from "react-hook-form";
 import { useAuth} from 'reactfire';
 import {signInWithEmailAndPassword} from "firebase/auth";
 import { useRouter } from 'next/navigation';
 import Modal from 'react-modal';
 import { useUserContext } from '../../layout';
-import { useEffect} from 'react';
 import { customStyles } from '@/utils/CustomStyles';
 const LoginPage = () =>{
 
@@ -27,29 +27,29 @@ const LoginPage = () =>{
         const closeModal = () => {
           setIsOpen(false);
         }
-        setTimeout(closeModal, 3000);
+        setTimeout(closeModal, 500);
     }
     
-    const signIn = async (email, password) =>{
+    const signIn = async (email, password, event) =>{
         //"esteEselPassword"
-        const response = await signInWithEmailAndPassword(auth,email,password);
-        console.log(response)
-        const userFirebase = auth.currentUser;
-        console.log(userFirebase);
-        setUser(userFirebase);
-        router.push('/main/start');
+        
+        try {
+            const response = await signInWithEmailAndPassword(auth,email,password);
+            console.log(response)
+            const userFirebase = auth.currentUser;
+            console.log(userFirebase);
+            setUser(userFirebase);
+            router.push('/main/start');
+        } catch(error){
+            showModal(event);
+        }
     }
-    const onSubmit = (data) =>{
+    const onSubmit = (data, event) =>{
         const user ={
             user:data.email,
             password:data.password
         }
-        try {
-            signIn(user.user, user.password);
-        } catch(error){
-
-        }
-        
+        signIn(user.user, user.password, event);
     }
     
     return (
