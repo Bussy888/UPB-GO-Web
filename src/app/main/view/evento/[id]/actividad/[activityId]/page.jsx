@@ -8,6 +8,9 @@ import { useActivityContext, useUserContext } from '@/app/layout';
 import {useFirestore, useFirestoreCollectionData} from "reactfire";
 import {collection, addDoc, setDoc, doc, getDoc, updateDoc} from "firebase/firestore";
 import { dateToString, stringDate } from '@/utils/Date';
+import Imagenes from '@/utils/Imagenes';
+import Modelos from '@/utils/Modelos';
+import { compararNombre } from '@/utils/SortOperations';
 const EditActivityPage = ({params}) => {
     const auth = useAuth();
     const router = useRouter();
@@ -15,6 +18,8 @@ const EditActivityPage = ({params}) => {
     const [evento, setEvento] = useState();
     const {user, setUser} = useUserContext();
     const {activity, setActivity} = useActivityContext();
+    const [imagenes, setImagenes] = useState(Imagenes.sort(compararNombre));
+    const [modelos, setModelos] = useState(Modelos.sort(compararNombre));
 
   const { register, watch, formState: { errors }, handleSubmit} = useForm({defaultValues: {admin: false}});
 
@@ -57,7 +62,7 @@ const onSubmit = (data) =>{
 
   useEffect(() => {
     //TODO: add context to save user there
-    if(!auth.currentUser){
+    if(!user){
         router.push('/main/login');
     }else{
         
@@ -78,7 +83,7 @@ const onSubmit = (data) =>{
                             multiline={true}
                             className=" w-full min-h-fit h-fit text-base p-4 text-black bg-[#E1E1E1] flex-wrap whitespace-normal"
                             {...register('descripcion', {
-                              value: activity.descripcion,
+                              value: activity?.descripcion,
                                 required: true
                             })}
                         />
@@ -91,7 +96,7 @@ const onSubmit = (data) =>{
                             type="text"
                             className=" w-full text-base p-4 text-black bg-[#E1E1E1]"
                             {...register('codigo', {
-                              value: activity.codigo,
+                              value: activity?.codigo,
                                 required: true
                             })}
                         />
@@ -104,7 +109,7 @@ const onSubmit = (data) =>{
                             type="text"
                             className=" w-full text-base p-4 text-black bg-[#E1E1E1]"
                             {...register('pista', {
-                              value: activity.pista,
+                              value: activity?.pista,
                                 required: true
                             })}
                         />
@@ -112,29 +117,34 @@ const onSubmit = (data) =>{
                     </div>
                     <div className='flex flex-col'>
                         <label className=" text-xl text-black mb-5 font-medium">Carta:</label>
-                        <input
-                          id="carta"
+                        <select
                             type="text"
-                            className=" w-full text-base p-4 text-black bg-[#E1E1E1]"
+                            className=" w-full text-base p-4 text-black bg-[#E1E1E1] gap-5"
+                            placeholder="Nombre de Carta"
                             {...register('carta', {
-                              value: activity.nombreCarta,
                                 required: true
                             })}
-                        />
-                        {errors.carta?.type === 'required' && <h1 className=" text-base text-red-700">*Debe llenar este campo</h1>}
+                        >
+                            {imagenes.map(imagen =>
+                                <option value={imagen.archivo}>{imagen.nombre}</option>)}
+                        </select>
+                        {errors.nombreCarta?.type === 'required' && <h1 className=" text-base text-red-700">*Debe llenar este campo</h1>}
                     </div>
                     <div className='flex flex-col'>
                         <label className=" text-xl text-black mb-5 font-medium">Modelo:</label>
-                        <input
-                          id="modelo"
+                        <select
                             type="text"
                             className=" w-full text-base p-4 text-black bg-[#E1E1E1]"
+                            placeholder="Nombre del Modelo"
                             {...register('modelo', {
-                              value: activity.nombreModelo,
                                 required: true
                             })}
-                        />
-                        {errors.modelo?.type === 'required' && <h1 className=" text-base text-red-700">*Debe llenar este campo</h1>}
+                        >
+                            {modelos.map((modelo, index) =>
+                                <option value={modelo.archivo} key={index} className=" py-2">{modelo.nombre}</option>)}
+                        </select>
+
+                        {errors.nombreModelo?.type === 'required' && <h1 className=" text-base text-red-700">*Debe llenar este campo</h1>}
                     </div>
                     <div className='flex flex-col'>
                         <label className=" text-xl text-black mb-5 font-medium">Mensaje de acierto:</label>
@@ -143,7 +153,7 @@ const onSubmit = (data) =>{
                             type="text"
                             className=" w-full text-base p-4 text-black bg-[#E1E1E1]"
                             {...register('acierto', {
-                              value: activity.acierto,
+                              value: activity?.acierto,
                                 required: true
                             })}
                         />
@@ -156,7 +166,7 @@ const onSubmit = (data) =>{
                             type="text"
                             className=" w-full text-base p-4 text-black bg-[#E1E1E1]"
                             {...register('fallo', {
-                              value: activity.fallo,
+                              value: activity?.fallo,
                                 required: true
                             })}
                         />

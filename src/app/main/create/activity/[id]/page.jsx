@@ -8,11 +8,16 @@ import { useUserContext } from '@/app/layout';
 import {useFirestore, useFirestoreCollectionData} from "reactfire";
 import {collection, addDoc, setDoc, doc, getDoc, updateDoc, increment} from "firebase/firestore";
 import ShortUniqueId from 'short-unique-id';
+import Imagenes from '@/utils/Imagenes';
+import { compararNombre } from '@/utils/SortOperations';
+import Modelos from '@/utils/Modelos';
 const CreateActivityPage = ({params}) => {
     const auth = useAuth();
     const router = useRouter();
     const firestore = useFirestore();
     const [evento, setEvento] = useState();
+    const [imagenes, setImagenes] = useState(Imagenes.sort(compararNombre));
+    const [modelos, setModelos] = useState(Modelos.sort(compararNombre));
     const {user, setUser} = useUserContext();
     const uid = new ShortUniqueId({length: process.env.UID_LENGTH})
 
@@ -117,27 +122,34 @@ const onSubmit = (data) =>{
                         {errors.codigo?.type === 'required' && <h1 className=" text-base text-red-700">*Debe llenar este campo</h1>}
                     </div>
                     <div className='flex flex-col'>
-                        <label className=" text-xl text-black mb-5 font-medium">Nombre Carta:</label>
-                        <input
+                        <label className=" text-xl text-black mb-5 font-medium">Carta:</label>
+                        <select
                             type="text"
-                            className=" w-full text-base p-4 text-black bg-[#E1E1E1]"
-                            placeholder="Nombre de la carta"
+                            className=" w-full text-base p-4 text-black bg-[#E1E1E1] gap-5"
+                            placeholder="Nombre de Carta"
                             {...register('nombreCarta', {
                                 required: true
                             })}
-                        />
+                        >
+                            {imagenes.map(imagen =>
+                                <option value={imagen.archivo}>{imagen.nombre}</option>)}
+                        </select>
                         {errors.nombreCarta?.type === 'required' && <h1 className=" text-base text-red-700">*Debe llenar este campo</h1>}
                     </div>
                     <div className='flex flex-col'>
-                        <label className=" text-xl text-black mb-5 font-medium">Nombre Modelo:</label>
-                        <input
+                        <label className=" text-xl text-black mb-5 font-medium">Modelo:</label>
+                        <select
                             type="text"
                             className=" w-full text-base p-4 text-black bg-[#E1E1E1]"
                             placeholder="Nombre del Modelo"
                             {...register('nombreModelo', {
                                 required: true
                             })}
-                        />
+                        >
+                            {modelos.map((modelo, index) =>
+                                <option value={modelo.archivo} key={index} className=" py-2">{modelo.nombre}</option>)}
+                        </select>
+
                         {errors.nombreModelo?.type === 'required' && <h1 className=" text-base text-red-700">*Debe llenar este campo</h1>}
                     </div>
                     <div className='flex flex-col'>
