@@ -45,21 +45,6 @@ const onSubmit = (data) =>{
     router.push('/main/view/evento/'+params.id);
   }
 
-  const loadActivity = async () =>{
-    const activityRef = doc(firestore, "eventos/"+params.id, params.activityId);
-    const activityDoc = await getDoc(eventoRef);
-    const eventoData = eventoDoc.data();
-    const newEvent = {
-      id: eventoDoc.id,
-      nombre: eventoData.nombre,
-      fecha: eventoData.fecha,
-      userId: eventoData.user_id,
-      codigo: eventoData.codigo,
-      cantidadActividades: eventoData.cantidad_actividades
-    }
-    setEvento(newEvent);
-  }
-
   useEffect(() => {
     //TODO: add context to save user there
     if(!user){
@@ -122,7 +107,8 @@ const onSubmit = (data) =>{
                             className=" w-full text-base p-4 text-black bg-[#E1E1E1] gap-5"
                             placeholder="Nombre de Carta"
                             {...register('carta', {
-                                required: true
+                                required: true,
+                                value: activity?.nombreCarta
                             })}
                         >
                             {imagenes.map(imagen =>
@@ -137,7 +123,8 @@ const onSubmit = (data) =>{
                             className=" w-full text-base p-4 text-black bg-[#E1E1E1]"
                             placeholder="Nombre del Modelo"
                             {...register('modelo', {
-                                required: true
+                                required: true,
+                                value: activity?.nombreModelo
                             })}
                         >
                             {modelos.map((modelo, index) =>

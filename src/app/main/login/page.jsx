@@ -1,5 +1,6 @@
 "use client"
 import React from 'react';
+import Image from 'next/image';
 import { useEffect, useState} from 'react';
 import { useForm } from "react-hook-form";
 import { useAuth} from 'reactfire';
@@ -53,14 +54,15 @@ const LoginPage = () =>{
     }
     
     return (
-        <div className='flex w-full h-screen bg-[#F2F2F2] justify-center align-middle items-center'>
-            <div className='flex flex-col bg-[#EAEAEA] border-2 border-black py-6 px-6'>
-                <form className='flex flex-col gap-10' onSubmit={handleSubmit(onSubmit)}>
+        <div className='flex flex-col w-full h-screen bg-gradient-to-r from-[#6AB03F] from-15% via-[#D7FDC0] via-60% to-[#6AB03F] justify-center align-middle items-center gap-10'>
+            <div className='flex flex-col w-1/4 bg-[#E7DDCB] border-2 border-black p-6 justify-center align-middle items-center gap-4'>
+                <Image src="/UPB-removebg-preview.png" width={200} height={72}/>
+                <form className='flex flex-col gap-10 w-full' onSubmit={handleSubmit(onSubmit)}>
                     <div className='flex flex-col'>
                         <label className=" text-xl text-black mb-5 font-medium">Email</label>
                         <input
                             type="text"
-                            className=" text-base border-2 border-black w-72 h-9 invalid:border-red-800 px-4 py-3 text-black"
+                            className="w-full text-base p-4 text-black bg-[#D2C3A7]"
                             placeholder="ejemplo123@upb.com"
                             {...register('email', {
                                 required: true
@@ -72,7 +74,7 @@ const LoginPage = () =>{
                         <label className=" text-xl text-black mb-5 font-medium">Password</label>
                         <input
                             type="password"
-                            className=" text-base border-2 border-black w-72 h-9 invalid:border-red-800 px-4 py-3 text-black"
+                            className="w-full text-base p-4 text-black bg-[#D2C3A7]"
                             placeholder="*******"
                             {...register('password', {
                                 required: true
@@ -80,14 +82,15 @@ const LoginPage = () =>{
                         />
                         {errors.password?.type === 'required' && <h1 className=" text-base text-red-700">*Debe llenar este campo</h1>}
                     </div>
-                    <button className=' flex text-xl font-medium w-76 h-9 bg-[#929292] px-5 py-6 text-white justify-center items-center align-middle' type="submit">Continuar</button>
+                    <button className=' flex text-xl font-medium w-76 h-9 bg-[#807665] px-5 py-6 text-white justify-center items-center align-middle' type="submit">Continuar</button>
 
                 </form>
                 <Modal isOpen={isOpen} style={customStyles}>
-                    <div className="texto-normal font-normal flex w-full h-full justify-center items-center">Contraseña o email incorrectos</div>
+                    <div className="texto-normal font-medium flex w-full h-full justify-center items-center">Contraseña o email incorrectos</div>
                 </Modal>
                 
             </div>
+            <Image src="/tree.gif" width={180} height={184}/>
         </div>
     );
 }

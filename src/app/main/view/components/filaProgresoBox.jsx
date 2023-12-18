@@ -33,7 +33,7 @@ const FilaProgresoBox = (params) =>{
 
     return(
         <div className='flex flex-row w-full justify-center align-middle items-center border-b-2'>
-            <div className='flex w-full justify-center text-xs font-semibold text-black align-middle items-center bg-[#cfdee3] py-4 border-r-2'>
+            <div className='flex w-full justify-center text-xs font-semibold text-black align-middle items-center bg-[#C2DAB4] py-4 border-r-2'>
             Actividad #{actividad.posicion}
             </div>
             {equipos.length ===0 ?
@@ -44,7 +44,7 @@ const FilaProgresoBox = (params) =>{
                     {registros.length === 0 ? <></>
                     :
                         registros.filter(registro => registro.id === equipo.id).map((registro, index) =>
-                            <div className='flex w-full justify-center align-middle items-center text-black text-xs text-center bg-[#cfdee3] py-4 border-r-2' key={index}>
+                            <div className='flex w-full justify-center align-middle items-center text-black text-xs text-center bg-[#E7DDCB] py-4' key={index}>
                                 {registro.horaRegistro}
                             </div>
                         )

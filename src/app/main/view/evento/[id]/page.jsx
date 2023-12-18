@@ -9,6 +9,8 @@ import {collection, addDoc, setDoc, doc, getDocs, getDoc, query, where, updateDo
 import ActivityBox from '../../components/activityBox';
 import EquipoBox from '../../components/equipoBox';
 import FilaProgresoBox from '../../components/filaProgresoBox';
+import Loading from '@/app/components/Loading';
+import Image from 'next/image';
 
 const ViewEventoPage = ({params}) => {
     const auth = useAuth();
@@ -16,9 +18,9 @@ const ViewEventoPage = ({params}) => {
     const {user, setUser} = useUserContext();
     const firestore = useFirestore();
     const eventosCollection = collection(firestore, "eventos");
-    const [actividades, setActividades] = useState([]);
-    const [equipos, setEquipos] = useState([]);
-    const [evento, setEvento] = useState();
+    const [actividades, setActividades] = useState(null);
+    const [equipos, setEquipos] = useState(null);
+    const [evento, setEvento] = useState(null);
     const [changed, setChanged] = useState(true)
     const {eventoEdit, setEventoEdit} = useEventoContext();
 
@@ -124,8 +126,10 @@ const ViewEventoPage = ({params}) => {
     }
 
     const startEquipoDeletion = (equipoId) =>{
-      deleteEquipo(equipoId);
-      setChanged(!changed);
+      if(equipos.length>1){
+        deleteEquipo(equipoId);
+        setChanged(!changed);
+      }
     }
 
     useEffect(() => {
@@ -150,15 +154,17 @@ const ViewEventoPage = ({params}) => {
     }
 
   return (
-    <div className='flex w-full min-h-screen bg-[#F2F2F2] justify-center align-middle items-center p-7'>
-      <div className='flex flex-col bg-[#EAEAEA] border-2 border-black p-6 gap-5 w-5/12'>
+    <div className='flex flex-col w-full min-h-screen bg-[#B5F091] justify-center align-middle items-center p-7 gap-10'>
+      {(equipos && actividades && evento) ? 
+      <>
+      <div className='flex flex-col bg-[#E7DDCB] border-2 border-black p-6 gap-5 w-5/12'>
             <div className='flex flex-row w-full gap-1 align-bottom items-start justify-left'>
                 <div className='flex text-3xl text-start text-black hover:text-gray-600 hover:underline cursor-pointer' onClick={() => redirigirEditar()}>{evento?.nombre}</div>
                 <div className='flex text-xs text-start text-black mb-1 hover:text-gray-600 hover:underline cursor-pointer' onClick={() => redirigirEditar()}>({evento?.fecha})</div>
             </div>
 
             <div className='flex text-xl text-start text-black'>Progreso</div>
-            <div className='flex flex-col border-black border-2 bg-[#F2F2F2]'>
+            <div className='flex flex-col border-black border-2 bg-[#FBF1DF]'>
               {
                 equipos.length === 0 ?
                 <></> :
@@ -168,7 +174,7 @@ const ViewEventoPage = ({params}) => {
                     Actividades\Equipos
                   </div>
                 {equipos.map((equipo, index) =>
-                <div className='flex w-full justify-center align-middle items-center text-base text-black text-center bg-[#cfdee3] py-4 border-r-2' key={index}>
+                <div className='flex w-full justify-center align-middle items-center text-base text-black text-center bg-[#C2DAB4] py-4 border-r-2' key={index}>
                     {equipo.nombre.toUpperCase()}
                 </div> )}
                 </div>
@@ -184,7 +190,7 @@ const ViewEventoPage = ({params}) => {
               }
               </div>
             <div className='flex text-xl text-start text-black'>Actividades</div>
-            <div className='flex flex-col w-full gap-5 justify-center align-middle items-center border-black border-2 p-4 bg-[#F2F2F2]'>
+            <div className='flex flex-col w-full gap-5 justify-center align-middle items-center border-black border-2 p-4 bg-[#FBF1DF]'>
               {actividades.length === 0 ?
               <></>
               :
@@ -193,11 +199,11 @@ const ViewEventoPage = ({params}) => {
                 <ActivityBox key={index} actividad={actividadLista} eventoId={params.id} startDeletion={startDeletion}/>
               )
               }
-              <button className=' flex text-xl font-base w-1/3 bg-[#929292] px-5 py-4 text-white justify-center items-center align-middle' onClick={() => redirigirCrear("activity")}>Añadir</button>
+              <button className=' flex text-xl font-base w-1/3 bg-[#807665] px-5 py-4 text-white justify-center items-center align-middle' onClick={() => redirigirCrear("activity")}>Añadir</button>
             </div>
             
             <div className='flex text-xl text-start text-black'>Equipos</div>
-            <div className='flex flex-col w-full gap-5 justify-center align-middle items-center border-black border-2 p-4 bg-[#F2F2F2]'>
+            <div className='flex flex-col w-full gap-5 justify-center align-middle items-center border-black border-2 p-4 bg-[#FBF1DF]'>
               {
                 equipos.length===0 ?
                 <></>
@@ -206,15 +212,21 @@ const ViewEventoPage = ({params}) => {
                   <EquipoBox key={index} equipo={equipo} eventoId={params.id} startEquipoDeletion={startEquipoDeletion} />
                 )
               }
-              <button className=' flex text-xl font-base w-1/3 bg-[#929292] px-5 py-4 text-white justify-center items-center align-middle' onClick={() => redirigirCrear("equipo")}>Añadir</button>
+              <button className=' flex text-xl font-base w-1/3 bg-[#807665] px-5 py-4 text-white justify-center items-center align-middle' onClick={() => redirigirCrear("equipo")}>Añadir</button>
             </div>
 
       
         <div className='flex w-full justify-center items-center align-middle flex-row gap-2'>
-          <button className=' flex text-xl font-medium w-4/5 h-9 bg-[#CDCDCD] px-5 py-7 text-stone-600 justify-center items-center align-middle' onClick={()=> back()}>Atrás</button>
+          <button className=' flex text-xl font-medium w-4/5 h-9 bg-[#D0C6B4] px-5 py-7 text-stone-600 justify-center items-center align-middle' onClick={()=> back()}>Atrás</button>
         </div>
-        
       </div>
+      <div className='flex w-full h-1/8 justify-center align-middle items-center opacity-50'>
+            <Image src="/UPB-removebg-preview.png" width={150} height={72}/>
+            </div>
+      </>
+      :
+      <Loading/>
+    }
     </div>
   )
 }

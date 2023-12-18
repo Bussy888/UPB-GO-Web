@@ -28,7 +28,6 @@ const EventBox = (evento) => {
     const updateResponse = await updateDoc(userRef, {
       eventos: increment(1)
     })
-    console.log(updateResponse);
     const userDoc = await getDoc(userRef);
     const userData = userDoc.data()
     const idEventoCopia=user?.uid+"Evento"+userData.eventos;
@@ -38,7 +37,6 @@ const EventBox = (evento) => {
       user_id: user?.uid,
       codigo: uid.rnd()
     });
-    console.log(responseSet)
     actividades.map(
       async (actividad) =>
       {
@@ -65,11 +63,11 @@ const EventBox = (evento) => {
       }
       const response = await addDoc(collection(firestore, "eventos/"+idEventoCopia+"/equipos"), newEquipo)
     });
+    evento.setChanged(!evento.changed);
   }
 
-  const copiarEvento = async()=>{
+  const copiarEvento = ()=>{
     postData();
-    setChanged(!changed)
   }
 
   const deleteActividades = async() =>{
@@ -83,12 +81,13 @@ const EventBox = (evento) => {
 
   const deleteEvento = async () =>{
     const response = await deleteDoc(doc(firestore, "eventos", evento.evento.id));
+    setChanged(!changed);
+    evento.setChanged(!evento.changed);
   }
 
   const startDeletion = () =>{
     deleteActividades();
     deleteEvento();
-    setChanged(!changed)
   }
 
   const loadActividades = async () =>{
@@ -131,8 +130,8 @@ useEffect(() => {
 
   return (
     <>
-      <div className='flex flex-col border-2 border-black bg-[#f6f6f6] w-full' key={evento.index}>
-      <div className='flex flex-col bg-[#f6f6f6] p-5 gap-5 w-full'>
+      <div className='flex flex-col border-2 border-black bg-[#FBF1DF] w-full' key={evento.index}>
+      <div className='flex flex-col bg-[#FBF1DF] p-5 gap-5 w-full'>
         <div className='flex flex-row'>
             <div className='flex flex-row w-4/5 gap-1 align-bottom items-end'>
                 <div className='flex text-xl text-start text-black truncate'>{evento.evento.nombre}</div>
@@ -144,13 +143,13 @@ useEffect(() => {
             </div>
         </div>
         
-        <div className='flex flex-wrap flex-col gap-5 w-full text-black text-left whitespace-normal font-normal text-base' >
+        <div className='flex flex-col w-full gap-5'>
           {actividades.length === 0 ?
             <></>
             :
             
             actividades.map((actividadLista, index) => 
-            <div className='flex w-full text-black h-6 truncate font-light' index={index}>
+            <div className='flex w-full h-6 text-black truncate font-light' index={index}>
               # {actividadLista.posicion} {actividadLista.descripcion}
             </div>)
             
