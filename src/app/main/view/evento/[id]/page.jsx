@@ -211,7 +211,10 @@ const ViewEventoPage = ({params}) => {
               }
               <button className=' flex text-xl font-base w-1/3 bg-[#807665] px-5 py-4 text-white justify-center items-center align-middle' onClick={() => redirigirCrear("equipo")}>Añadir</button>
             </div>
-
+            <div className='flex text-xl text-start text-black'>Descargar Imágenes</div>
+            <div className='flex flex-col w-full gap-5 justify-center align-middle items-center border-black border-2 p-4 bg-[#FBF1DF]'>
+            <div className=" text-black text-base font-medium text-center">{"https://drive.google.com/drive/folders/1R24QQcpt5-50euW1-z9QZxHbo4mjcx1k?usp=drive_link"}</div>
+            </div>
       
         <div className='flex w-full justify-center items-center align-middle flex-row gap-2'>
           <button className=' flex text-xl font-medium w-4/5 h-9 bg-[#D0C6B4] px-5 py-7 text-stone-600 justify-center items-center align-middle' onClick={()=> back()}>Atrás</button>

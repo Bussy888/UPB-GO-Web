@@ -56,7 +56,7 @@ const back = () =>{
                         />
                     </div>
                     <div className='flex flex-col h-1/3'>
-            <div className=" text-black text-xs font-medium text-center">Después de hacer click en ‘Confirmar’, upb-go enviará un email a la cuenta especificada. Si no la especifica, se enviará un email a la cuenta con la que hizo login.</div>
+            <div className=" text-black text-xs font-medium text-center">{"Después de hacer click en ‘Confirmar’, upb-go enviará un email a la cuenta especificada. Si no la especifica, se enviará un email a la cuenta con la que hizo login."}</div>
           </div>
         </div>
         <div className='flex w-full justify-center items-center align-middle flex-row gap-2'>
