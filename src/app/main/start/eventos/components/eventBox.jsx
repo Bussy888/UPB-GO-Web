@@ -106,7 +106,6 @@ const EventBox = (evento) => {
       }
       return newActivity;
     });
-    console.log(aux)
     const sortedAux = aux.sort(compararPosicion);
     setActividades(sortedAux);
   }

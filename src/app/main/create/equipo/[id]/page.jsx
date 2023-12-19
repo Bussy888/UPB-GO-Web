@@ -32,7 +32,6 @@ const CreateActivityPage = ({params}) => {
   const postData = async (equipo) =>{
     const equipoCollection = collection(firestore, "eventos/"+params.id+"/equipos")
     const equipoDoc = await addDoc(equipoCollection, equipo);
-    console.log(equipoDoc)
     
     router.push('/main/view/evento/'+params.id);
 }
@@ -67,7 +66,6 @@ const onSubmit = (data, event) =>{
         }
         return newEquipo;
       });
-      console.log(aux)
       setEquipos(aux);
     }
     
@@ -85,7 +83,6 @@ const onSubmit = (data, event) =>{
       codigo: eventoData.codigo,
       cantidadActividades: eventoData.cantidad_actividades
     }
-    console.log(newEvent)
     setEvento(newEvent);
     loadEquipos(newEvent.id)
   }
@@ -100,15 +97,15 @@ const onSubmit = (data, event) =>{
   }, [])
 
   return (
-    <div className='flex w-full min-h-screen bg-[#F2F2F2] justify-center align-middle items-center'>
-      <form className='flex flex-col bg-[#EAEAEA] border-2 border-black py-6 px-6 gap-10 justify-center align-middle items-center w-5/12' onSubmit={handleSubmit(onSubmit)}>
+    <div className='flex w-full min-h-screen bg-[#112A7C] justify-center align-middle items-center'>
+      <form className='flex flex-col bg-[#E7DDCB] border-2 border-black py-6 px-6 gap-10 justify-center align-middle items-center w-5/12' onSubmit={handleSubmit(onSubmit)}>
         <div className='flex text-black text-2xl font-normal text-start w-full'>Nuevo Equipo</div>
-        <div className='flex flex-col border-2 border-black p-5 gap-5 w-full bg-[#f6f6f6]'>
+        <div className='flex flex-col border-2 border-black p-5 gap-5 w-full bg-[#FBF1DF]'>
                     <div className='flex flex-col'>
                         <label className=" text-xl text-black mb-5 font-medium">Nombre:</label>
                         <input
                             type="text"
-                            className=" w-full text-base p-4 text-black bg-[#E1E1E1]"
+                            className=" w-full text-base p-4 text-black bg-[#D2C3A7] placeholder:text-stone-600"
                             placeholder="Ingrese el nombre del equipo"
                             {...register('nombre', {
                                 required: true
@@ -120,18 +117,19 @@ const onSubmit = (data, event) =>{
                         <label className=" text-xl text-black mb-5 font-medium">Secuencia:</label>
                         <input
                             type="text"
-                            className=" w-full text-base p-4 text-black bg-[#E1E1E1]"
+                            className=" w-full text-base p-4 text-black bg-[#D2C3A7] placeholder:text-stone-600"
                             placeholder="El orden en el que completarán las actividades"
                             {...register('secuencia', {
                                 required: true
                             })}
                         />
                         {errors.pista?.type === 'required' && <h1 className=" text-base text-red-700">*Debe llenar este campo</h1>}
+                        <div className=" text-black text-xs font-medium text-center mt-4">*No incluya la actividad 0</div>
                     </div>
         </div>
         <div className='flex w-full justify-center items-center align-middle flex-row gap-2'>
-          <div className=' flex text-xl font-medium w-1/3 h-9 bg-[#CDCDCD] px-5 py-6 text-stone-600 justify-center items-center align-middle cursor-pointer' onClick={() => back()}>Atrás</div>
-          <button className=' flex text-xl font-medium w-1/3 h-9 bg-[#929292] px-5 py-6 text-white justify-center items-center align-middle' type='submit'>Guardar</button>
+          <div className=' flex text-xl font-medium w-1/3 h-9 bg-[#D0C6B4] px-5 py-6 text-stone-600 justify-center items-center align-middle cursor-pointer' onClick={() => back()}>Atrás</div>
+          <button className=' flex text-xl font-medium w-1/3 h-9 bg-[#807665] px-5 py-6 text-white justify-center items-center align-middle' type='submit'>Guardar</button>
         </div>
       </form>
       <Modal isOpen={isOpen} style={customStyles}>

@@ -34,7 +34,7 @@ const ActivityBox = (params) =>{
                     Editar
                   </div>
                 </div>
-                <div className='w-full px-7 py-5 justify-left align-start items-start text-left text-black bg-[#C2DAB4]'>
+                <div className='w-full px-7 py-5 justify-left align-start items-start text-left text-black bg-[#FFE1A0]'>
                   Código: {actividad.codigo}
                 </div>
                 

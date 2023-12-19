@@ -36,9 +36,7 @@ const LoginPage = () =>{
         
         try {
             const response = await signInWithEmailAndPassword(auth,email,password);
-            console.log(response)
             const userFirebase = auth.currentUser;
-            console.log(userFirebase);
             setUser(userFirebase);
             router.push('/main/start');
         } catch(error){
@@ -54,9 +52,9 @@ const LoginPage = () =>{
     }
     
     return (
-        <div className='flex flex-col w-full h-screen bg-gradient-to-r from-[#6AB03F] from-15% via-[#D7FDC0] via-60% to-[#6AB03F] justify-center align-middle items-center gap-10'>
+        <div className='flex flex-col w-full h-screen bg-gradient-to-r from-[#112A7C] from-15% via-[#D99A0F] via-60% to-[#112A7C] justify-center align-middle items-center gap-10'>
             <div className='flex flex-col w-1/4 bg-[#E7DDCB] border-2 border-black p-6 justify-center align-middle items-center gap-4'>
-                <Image src="/UPB-removebg-preview.png" width={200} height={72}/>
+                <Image src="/blacklogofinal.png" width={85} height={72}/>
                 <form className='flex flex-col gap-10 w-full' onSubmit={handleSubmit(onSubmit)}>
                     <div className='flex flex-col'>
                         <label className=" text-xl text-black mb-5 font-medium">Email</label>

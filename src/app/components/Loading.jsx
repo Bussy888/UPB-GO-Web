@@ -6,7 +6,7 @@ const Loading = () => {
     return (
         <div className='flex flex-col border-black py-6 px-6 gap-10'>
             <Image src="/pikachu.gif" width={225} height={72}/>
-            <div  className='flex text-xl font-bold w-full text-black justify-center items-center align-middle'>Cargando...</div>
+            <div  className='flex text-xl font-bold w-full text-white justify-center items-center align-middle'>Cargando...</div>
         </div>
     );
 }

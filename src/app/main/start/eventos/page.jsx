@@ -53,7 +53,7 @@ const EventosPage = () => {
   }
 
   return (
-    <div className='flex w-full flex-col h-screen bg-[#B5F091] justify-center align-middle items-center p-7 gap-10'>
+    <div className='flex w-full flex-col h-screen bg-[#112A7C] justify-center align-middle items-center p-7 gap-10'>
       {
         eventos ?
       <>
@@ -78,7 +78,7 @@ const EventosPage = () => {
         </div>
       </div>
       <div className='flex w-full h-1/8 justify-center align-middle items-center opacity-50'>
-            <Image src="/UPB-removebg-preview.png" width={150} height={72}/>
+      <Image src="/blacklogofinal.png" width={75} height={72}/>
             </div>
       </>
       :

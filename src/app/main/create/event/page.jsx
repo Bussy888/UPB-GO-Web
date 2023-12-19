@@ -23,13 +23,11 @@ const EventosPage = () => {
       const updateResponse = await updateDoc(userRef, {
         eventos: increment(1)
       })
-      console.log(updateResponse);
       const userDoc = await getDoc(userRef);
       const userData = userDoc.data()
       const idEvento=user?.uid+"Evento"+userData.eventos;
 
       const responseSet = await setDoc(doc(firestore, "eventos", idEvento),evento);
-      console.log(responseSet)
 
       const actividadPrueba = await setDoc(doc(firestore, "eventos/"+idEvento+"/actividades", idEvento+"Actividad"+0),{
         codigo: ActividadPrueba.codigo,
@@ -42,17 +40,17 @@ const EventosPage = () => {
         fallo: ActividadPrueba.fallo,
         evento_id: idEvento
       });
-      console.log(actividadPrueba)
 
       const primerEquipo = await addDoc(
         collection(firestore, "eventos/"+idEvento+"/equipos"),
         {
-          secuencia: "0",
+          secuencia: "1",
           nombre: "rojo",
           asignado: false,
           evento_id: idEvento
         }
       )
+      router.push('/main/start/eventos');
     }
 
     const onSubmit = (data) =>{
@@ -64,13 +62,10 @@ const EventosPage = () => {
           cantidad_actividades: 1
       }
       postData(evento);
-      router.push('/main/start/eventos');
   }
   useEffect(() => {
     if(!auth.currentUser){
         router.push('/main/login');
-    }else{
-        console.log("hola");
     }
   }, [])
 
@@ -79,15 +74,15 @@ const EventosPage = () => {
   }
 
   return (
-    <div className='flex w-full min-h-screen bg-[#F2F2F2] justify-center align-middle items-center'>
-      <form className='flex flex-col bg-[#EAEAEA] border-2 border-black py-6 px-6 gap-10 justify-center align-middle items-center w-5/12' onSubmit={handleSubmit(onSubmit)}>
+    <div className='flex w-full min-h-screen bg-[#112A7C] justify-center align-middle items-center'>
+      <form className='flex flex-col bg-[#E7DDCB] border-2 border-black py-6 px-6 gap-10 justify-center align-middle items-center w-5/12' onSubmit={handleSubmit(onSubmit)}>
         <div className='flex text-black text-2xl font-normal text-start w-full'>Nuevo Evento</div>
-        <div className='flex flex-col border-2 border-black p-5 gap-5 w-full bg-[#f6f6f6]'>
+        <div className='flex flex-col border-2 border-black p-5 gap-5 w-full bg-[#FBF1DF]'>
                     <div className='flex flex-col'>
                         <label className=" text-xl text-black mb-5 font-medium">Nombre:</label>
                         <input
                             type="text"
-                            className=" w-full text-base p-4 text-black bg-[#E1E1E1]"
+                            className=" w-full text-base p-4 text-black bg-[#D2C3A7] placeholder:text-stone-600"
                             placeholder="Ingrese el nombre del evento"
                             {...register('nombre', {
                                 required: true
@@ -99,7 +94,7 @@ const EventosPage = () => {
                         <label className=" text-xl text-black mb-5 font-medium">Fecha:</label>
                         <input
                             type="date"
-                            className=" w-full text-base p-4 text-black bg-[#E1E1E1]"
+                            className=" w-full text-base p-4 text-black bg-[#D2C3A7]"
                             min={stringDate()}
                             placeholder="Donde encontrarán la actividad los participantes"
                             {...register('fecha', {
@@ -111,8 +106,8 @@ const EventosPage = () => {
                     </div>
         </div>
         <div className='flex w-full justify-center items-center align-middle flex-row gap-2'>
-          <div className=' flex text-xl font-medium w-1/3 h-9 bg-[#CDCDCD] px-5 py-6 text-stone-600 justify-center items-center align-middle cursor-pointer' onClick={() => back()}>Atrás</div>
-          <button className=' flex text-xl font-medium w-1/3 h-9 bg-[#929292] px-5 py-6 text-white justify-center items-center align-middle' type='submit'>Guardar</button>
+          <div className=' flex text-xl font-medium w-1/3 h-9 bg-[#D0C6B4] px-5 py-6 text-stone-600 justify-center items-center align-middle cursor-pointer' onClick={() => back()}>Atrás</div>
+          <button className=' flex text-xl font-medium w-1/3 h-9 bg-[#807665] px-5 py-6 text-white justify-center items-center align-middle' type='submit'>Guardar</button>
         </div>
       </form>
     </div>

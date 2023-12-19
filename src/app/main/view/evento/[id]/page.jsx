@@ -43,7 +43,6 @@ const ViewEventoPage = ({params}) => {
             }
             return newEquipo;
           });
-          console.log(aux)
           setEquipos(aux);
         }
         
@@ -68,7 +67,6 @@ const ViewEventoPage = ({params}) => {
           }
           return newActivity;
         });
-        console.log(aux)
         const sortedAux = aux.sort(compararPosicion);
         setActividades(sortedAux);
       }
@@ -85,7 +83,6 @@ const ViewEventoPage = ({params}) => {
           codigo: eventoData.codigo,
           cantidadActividades: eventoData.cantidad_actividades
         }
-        console.log(newEvent)
         setEvento(newEvent);
         await loadActividades(newEvent.id);
         await loadEquipos(newEvent.id);
@@ -154,7 +151,7 @@ const ViewEventoPage = ({params}) => {
     }
 
   return (
-    <div className='flex flex-col w-full min-h-screen bg-[#B5F091] justify-center align-middle items-center p-7 gap-10'>
+    <div className='flex flex-col w-full min-h-screen bg-[#112A7C] justify-center align-middle items-center p-7 gap-10'>
       {(equipos && actividades && evento) ? 
       <>
       <div className='flex flex-col bg-[#E7DDCB] border-2 border-black p-6 gap-5 w-5/12'>
@@ -162,7 +159,7 @@ const ViewEventoPage = ({params}) => {
                 <div className='flex text-3xl text-start text-black hover:text-gray-600 hover:underline cursor-pointer' onClick={() => redirigirEditar()}>{evento?.nombre}</div>
                 <div className='flex text-xs text-start text-black mb-1 hover:text-gray-600 hover:underline cursor-pointer' onClick={() => redirigirEditar()}>({evento?.fecha})</div>
             </div>
-
+            <div className='flex text-xl text-start text-black'>Código: {evento?.codigo}</div>
             <div className='flex text-xl text-start text-black'>Progreso</div>
             <div className='flex flex-col border-black border-2 bg-[#FBF1DF]'>
               {
@@ -174,7 +171,7 @@ const ViewEventoPage = ({params}) => {
                     Actividades\Equipos
                   </div>
                 {equipos.map((equipo, index) =>
-                <div className='flex w-full justify-center align-middle items-center text-base text-black text-center bg-[#C2DAB4] py-4 border-r-2' key={index}>
+                <div className='flex w-full justify-center align-middle items-center text-base text-black text-center bg-[#FFCA56] py-4 border-r-2' key={index}>
                     {equipo.nombre.toUpperCase()}
                 </div> )}
                 </div>
@@ -221,7 +218,7 @@ const ViewEventoPage = ({params}) => {
         </div>
       </div>
       <div className='flex w-full h-1/8 justify-center align-middle items-center opacity-50'>
-            <Image src="/UPB-removebg-preview.png" width={150} height={72}/>
+      <Image src="/blacklogofinal.png" width={75} height={72}/>
             </div>
       </>
       :
