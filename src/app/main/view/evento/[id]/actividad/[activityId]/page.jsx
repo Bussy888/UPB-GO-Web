@@ -110,8 +110,8 @@ const onSubmit = (data) =>{
                                 value: activity?.nombreCarta
                             })}
                         >
-                            {imagenes.map(imagen =>
-                                <option value={imagen.archivo}>{imagen.nombre}</option>)}
+                            {imagenes.map((imagen,index) =>
+                                <option value={imagen.archivo} key={index}>{imagen.nombre}</option>)}
                         </select>
                         {errors.nombreCarta?.type === 'required' && <h1 className=" text-base text-red-700">*Debe llenar este campo</h1>}
                     </div>

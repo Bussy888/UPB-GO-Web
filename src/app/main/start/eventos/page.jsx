@@ -64,7 +64,7 @@ const EventosPage = () => {
           <div className='flex flex-col h-4/5 gap-5 overflow-y-scroll'>
             {eventos.length === 0 ?
             <div className='flex flex-col gap-10 border-2 border-black bg-[#FBF1DF] p-5 w-full' >
-            <div className=" text-xl text-black font-medium text-center">Puedes crear tu primer evento haciendo click en 'Añadir'</div>
+            <div className=" text-xl text-black font-medium text-center">{"Puedes crear tu primer evento haciendo click en 'Añadir'"}</div>
             </div>:
             
             eventos.map((eventoLista, index) => <EventBox evento={eventoLista} key={index} changed={changed} setChanged={setChanged}></EventBox>)

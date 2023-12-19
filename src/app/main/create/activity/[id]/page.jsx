@@ -68,7 +68,6 @@ const onSubmit = (data) =>{
   }
 
   useEffect(() => {
-    //TODO: add context to save user there
     if(!auth.currentUser){
         router.push('/main/login');
     }else{
@@ -127,8 +126,8 @@ const onSubmit = (data) =>{
                                 required: true
                             })}
                         >
-                            {imagenes.map(imagen =>
-                                <option value={imagen.archivo}>{imagen.nombre}</option>)}
+                            {imagenes.map((imagen, index) =>
+                                <option value={imagen.archivo} key={index}>{imagen.nombre}</option>)}
                         </select>
                         {errors.nombreCarta?.type === 'required' && <h1 className=" text-base text-red-700">*Debe llenar este campo</h1>}
                     </div>

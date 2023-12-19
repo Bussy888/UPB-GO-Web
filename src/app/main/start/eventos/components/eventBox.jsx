@@ -148,7 +148,7 @@ useEffect(() => {
             :
             
             actividades.map((actividadLista, index) => 
-            <div className='flex w-full h-6 text-black truncate font-light' index={index}>
+            <div className='flex w-full h-6 text-black truncate font-light' key={index}>
               # {actividadLista.posicion} {actividadLista.descripcion}
             </div>)
             
